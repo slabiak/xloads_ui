@@ -1,0 +1,113 @@
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import throttle from 'lodash/throttle';
+import axios from 'axios';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import classes from './Search.module.css';
+import Grid from '@material-ui/core/Grid';
+
+export default function Search(props) {
+const CancelToken = axios.CancelToken;
+let cancel;
+  const [inputValue, setInputValue] = React.useState('');
+  const [options, setOptions] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+
+  const fetch = React.useMemo(
+    () =>
+      throttle((param) => {
+        setLoading(true);
+        if (cancel !== undefined) {
+            cancel();
+        }
+        axios.get(`https://photon.komoot.de/api/?q=${param.value}&limit=10`,{
+            cancelToken: new CancelToken(function executor(c) {
+              // An executor function receives a cancel function as a parameter
+              cancel = c;
+            })
+          })
+        .then(resp => {
+            setLoading(false);
+            let features = resp.data.features;
+            setOptions(features);
+        }).catch(e=>{
+            if(axios.isCancel(e)){
+                console.log('request cancelled');
+            }
+        })
+      }, 500),
+    [],
+  );
+
+  React.useEffect(() => {
+
+    if (inputValue.length > 0) {
+        fetch({value: inputValue});
+    } else {
+        setLoading(false);
+        setOptions([]);
+        return undefined;
+    }
+
+
+
+  }, [inputValue, fetch]);
+
+  React.useEffect(() => {
+    if (!open) {
+      setOptions([]);
+    }
+  }, [open]);
+
+  return (
+         <Grid container justify = "center">
+
+    <Autocomplete
+      id="google-map-demo"
+      style={{ width: 300 }}
+      open={open}
+      onClose={(event,reason)=>{
+        setOpen(false);
+      }}
+      onOpen={() => {
+        setOpen(true);
+      }}
+      freeSolo
+      getOptionLabel={(option) => (typeof option === 'string' ? option : option.properties.name )}
+      filterOptions={(x) => x}
+      options={options}
+      autoComplete
+      includeInputInList
+      onChange={(event,value,reason)=>{
+          if(reason==='select-option'){
+              props.clicked(value);
+          }
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Wpisz adres"
+          variant="outlined"
+          onChange={handleChange}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+    />
+    </Grid>
+  );
+}
