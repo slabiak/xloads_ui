@@ -3,23 +3,26 @@ import { Map, TileLayer, Marker, GeoJSON} from 'react-leaflet';
 
 class MapComp extends Component {
   state = {
-    zoom: 11
+    zoom: 11,
+    colors : ['#e41a1c','#d95f02','#7570b3','#e7298a','#66a61e']
   }
 
   render() {
     let center = [this.props.selectedPlace.geometry.coordinates[1], this.props.selectedPlace.geometry.coordinates[0]]
     let selectedPlaceMarker = (<Marker position={center}></Marker>)
-    let offersMarkers = this.props.offers.map(offer => <Marker position={[offer.coordinates.lat,offer.coordinates.lng]}></Marker>)
+    let offersMarkers = this.props.offers.map(offer => <Marker key={offer.id} position={[offer.coordinates.lat,offer.coordinates.lng]}></Marker>)
     let routes= null
-
     var offersWithRoute =this.props.offers.filter(offer => !offer.calculationRequired)
     if(offersWithRoute.length>0){
     routes = offersWithRoute.map(offer => 
-       <GeoJSON data={{
+      
+       <GeoJSON key={offer.id} data={{
         type: "Feature",
-        geometry: {"coordinates": decodePath( offer.path.points, false), "type": "LineString"},
-        properties: {style: {color: "#00cc33", weight: 6, opacity: 0.4}}
-    }} /> );
+        geometry: {"coordinates": decodePath( offer.path.points, false), "type": "LineString"}
+        
+    }} style = {{color: this.state.colors[0]
+    , weight: 6, opacity: 1}}
+   /> );
     
   } 
 

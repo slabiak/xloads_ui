@@ -88,7 +88,6 @@ componentDidUpdate(prevProps, prevState) {
           </Row>
         </Col> 
       </Row>
-      <Row></Row>
     </Container>
 
   );

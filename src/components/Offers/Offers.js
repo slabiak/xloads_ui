@@ -6,7 +6,7 @@ function Offers(props) {
 
 
     let offers = props.data.map(offer => 
-        <li><Offer data={offer}></Offer></li>
+        <li key={offer.id}><Offer data={offer}></Offer></li>
     )
     return (
     <div>

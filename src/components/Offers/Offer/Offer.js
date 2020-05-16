@@ -13,7 +13,7 @@ function Offer(props) {
     }
     return (
     <div>
-        <p>{props.data.name}, {props.data.address}, time: {spinner} {routeInfo}</p>
+       {props.data.name}, {props.data.address}, time: {spinner} {routeInfo}
     </div>
     )
 }
