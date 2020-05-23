@@ -1,0 +1,9 @@
+.ActiveButton {
+    background:greenyellow;
+    border-width: 1px;
+}
+
+.InactiveButton {
+    background:none;
+    border-width: 1px
+}

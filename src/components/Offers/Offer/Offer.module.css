@@ -1,0 +1,8 @@
+.OfferItem {
+    border-width: 4px;
+    background-color: gray;
+    border-color: brown;
+    margin: 30px;
+    margin-top: 0px;
+    height: 200px;
+}

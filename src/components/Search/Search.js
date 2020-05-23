@@ -6,6 +6,8 @@ import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import classes from './Search.module.css';
 import Grid from '@material-ui/core/Grid';
+import { red } from '@material-ui/core/colors';
+import RouteControls from './../RouteControls/RouteControls.js';
 
 export default function Search(props) {
 const CancelToken = axios.CancelToken;
@@ -55,9 +57,6 @@ let cancel;
         setOptions([]);
         return undefined;
     }
-
-
-
   }, [inputValue, fetch]);
 
   React.useEffect(() => {
@@ -67,11 +66,11 @@ let cancel;
   }, [open]);
 
   return (
-         <Grid container justify = "center">
-
+         <Grid container justify = "center"  >
+    <div>
     <Autocomplete
       id="google-map-demo"
-      style={{ width: 300 }}
+      style={{ width: 400,marginBottom:'30px', backgroundColor:"#FFFFFF"}}
       open={open}
       onClose={(event,reason)=>{
         setOpen(false);
@@ -93,7 +92,7 @@ let cancel;
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Wpisz adres"
+          label="Wpisz adres lub przesuń czerwony marker"
           variant="outlined"
           onChange={handleChange}
           InputProps={{
@@ -108,6 +107,8 @@ let cancel;
         />
       )}
     />
-    </Grid>
+    </div>
+          <RouteControls onRouteTypeChange={props.onRouteTypeChange} activeRouteType={props.routeType}></RouteControls>
+     </Grid>
   );
 }
