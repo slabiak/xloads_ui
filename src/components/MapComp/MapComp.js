@@ -6,7 +6,7 @@ import iconTarget from '../../UI/marker/iconTarget';
 class MapComp extends Component {
   state = {
     zoom: 12,
-    colors : ['#0000FF','#ff0000'],
+    colors : ['grey','#73c93e'],
     showModal : false,
     modalOffer: null,
     hoveredMarker: {
@@ -52,22 +52,23 @@ class MapComp extends Component {
     if(offersWithRoute.length>0){
     routes = offersWithRoute.map(offer => 
       {
-       let routeStyle = {color: this.state.colors[0], weight: 3, opacity: 1};
+       let routeStyle = {color: this.state.colors[0], weight: 4, opacity: 1};
        if((this.props.hooveredOffer.state ==true && this.props.hooveredOffer.offerId==offer.id) || (this.state.hoveredMarker.state==true &&this.state.hoveredMarker.offerId == offer.id)){
        routeStyle = {color: this.state.colors[1], weight: 6, opacity: 1};
-       console.log('zmieniam styl!');
        }
       let route = null;
       if(this.props.routeType==='transit'){  
-        if(offer.paths[0].mode==='transit'){
+
+        if(offer.paths[0].mode==='transit' ){
         route = offer.paths[0].sections.map(section=>{
+          if((this.props.hooveredOffer.state ==true && this.props.hooveredOffer.offerId==offer.id) || (this.state.hoveredMarker.state==true &&this.state.hoveredMarker.offerId == offer.id)){
           if(section.mode==='WALK'){
-            routeStyle = {color: 'grey', weight: 6, opacity: 1};
-            console.log('walk i grey');
+            routeStyle = {color: 'black', weight: 4, opacity: 1, dashArray: '1,10'};
           } 
-          else if(section.mode==='TRAM' || section.mode==='BUS'){
-            routeStyle = {color: 'green', weight: 6, opacity: 1};
+          else {
+            routeStyle = {color: this.state.colors[1], weight: 6, opacity: 1};
           }
+        }
           return <GeoJSON key={offer.id + routeStyle.color + section.value[0]+section.value[1]} data={{
             type: "LineString",
             coordinates: decodePath(section.value,false)}
@@ -99,8 +100,8 @@ class MapComp extends Component {
       <React.Fragment>
           <Map center={center} zoom={this.state.zoom} onzoomlevelschange={(e)=>this.zoomChangeHandler(e)}>
       <TileLayer
-        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
+        url="https://api.maptiler.com/maps/positron/{z}/{x}/{y}.png?key=u2fRkDnGTO0UDCKhxIIF"
         />
         {selectedPlaceMarker}
         {offersMarkers}

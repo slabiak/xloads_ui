@@ -31,16 +31,38 @@ state = {
 
 onTargetMarketDragEndHanlder = (e)=>{
   let newSelectedPlace = {
-    geometry: {coordinates: [e.target._latlng.lng,e.target._latlng.lat]}
+    address: 'dupa adres',
+    geometry: {coordinates: [e.target._latlng.lng,e.target._latlng.lat]},
+    autocomplete: false
   }
   let clearOffers = this.state.offers.map(offer=>
     {
-      var temp = Object.assign({}, offer);
-      temp.calculationRequired=true;
+    var temp = Object.assign({}, offer);
+    temp.calculationRequired=true;
     temp.paths = null;
     return temp;
     });
-  this.setState({selectedPlace: newSelectedPlace,currentRouteToFetch:0, offers: clearOffers})
+  //this.setState({selectedPlace: newSelectedPlace,currentRouteToFetch:0, offers: clearOffers})
+  
+  axios.get(`http://photon.komoot.de/reverse?lon=${e.target._latlng.lng}&lat=${e.target._latlng.lat}`)
+  .then(res=> {
+    let adddress = res.data.features[0].properties.city +', ul. '+ res.data.features[0].properties.street + ', '+ res.data.features[0].properties.housenumber
+    let newSelectedPlace = {
+      address:  adddress,
+      geometry: {coordinates: [e.target._latlng.lng,e.target._latlng.lat]},
+      autocomplete: false
+    }
+    let clearOffers = this.state.offers.map(offer=>
+      {
+      var temp = Object.assign({}, offer);
+      temp.calculationRequired=true;
+      temp.paths = null;
+      return temp;
+      });
+    this.setState({selectedPlace: newSelectedPlace,currentRouteToFetch:0, offers: clearOffers});
+    //console.log('new selected place is '+ currentSelectedPlace);
+  })
+
 }
 
 selectedPlaceHandler = (feature) => {
@@ -51,7 +73,7 @@ selectedPlaceHandler = (feature) => {
     temp.paths = null;
     return temp;
     });
-  this.setState({selectedPlace:feature, currentRouteToFetch:0, offers: clearOffers})
+  this.setState({selectedPlace:{...feature, autocomplete: true}, currentRouteToFetch:0, offers: clearOffers})
 }
 
 onMouseOverOfferHandler = (id)=>{
@@ -161,7 +183,7 @@ componentDidUpdate(prevProps, prevState) {
         <Col md={7} >
           <div className='sticky-top' style={{top:'86px'}}>
         <Row>
-          <Search onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> 
+          <Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> 
           </Row>
           <Row>
             <MapComp routeType={this.state.routeType} onTargetMarketDragEndHanlder={this.onTargetMarketDragEndHanlder} selectedPlace={this.state.selectedPlace} offers={this.state.offers} hooveredOffer={this.state.hooveredOffer}></MapComp>

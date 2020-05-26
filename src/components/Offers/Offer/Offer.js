@@ -9,10 +9,26 @@ function Offer(props) {
     if(props.data.calculationRequired){
         spinner=<CircularProgress />
     } else {
+        let routes = props.data.paths[0].sections.filter(f=>f.transitLeg).map(o=>o.route);
+
+        let transitInfo = null;
+
+        if(props.data.paths[0].mode==='transit'){
+            transitInfo = (
+                <React.Fragment>
+                    <p>
+        linie: {routes.toString()}  <br/>
+        przesiadki: {props.data.paths[0].transfers}
+        </p>
+                </React.Fragment>
+            )
+        }
+
         routeInfo = 
         <p>
         czas:  {Math.round(props.data.paths[0].totalTime/ 60 * 100) / 100} min  <br/>
-        dystans:  {Math.round((props.data.paths[0].totalDistance/1000) * 100) / 100 } km  
+        dystans:  {Math.round((props.data.paths[0].totalDistance/1000) * 100) / 100 } km
+        {transitInfo}
         </p>
     }
     return (

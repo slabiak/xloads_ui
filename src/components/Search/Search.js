@@ -21,7 +21,6 @@ let cancel;
     setInputValue(event.target.value);
   };
 
-
   const fetch = React.useMemo(
     () =>
       throttle((param) => {
@@ -65,11 +64,19 @@ let cancel;
     }
   }, [open]);
 
+  React.useEffect(()=>{
+    console.log('zmiana ehehhe')
+    if(props.selectedPlace.autocomplete === false){
+    setInputValue(props.selectedPlace.address);
+    }
+  }, [props.selectedPlace])
+
   return (
          <Grid container justify = "center"  >
     <div>
     <Autocomplete
-      id="google-map-demo"
+      value={inputValue}
+      id="autocomplete"
       style={{ width: 400,marginBottom:'30px', backgroundColor:"#FFFFFF"}}
       open={open}
       onClose={(event,reason)=>{
@@ -87,9 +94,17 @@ let cancel;
       onChange={(event,value,reason)=>{
           if(reason==='select-option'){
               props.clicked(value);
+              setInputValue(value.properties.name)
           }
+          if(reason==='clear'){
+            setInputValue('');
+            setOptions([]);
+        }
       }}
-      renderInput={(params) => (
+      renderInput={(params) => {
+       
+        return (
+        
         <TextField
           {...params}
           label="Wpisz adres lub przesuń czerwony marker"
@@ -105,7 +120,8 @@ let cancel;
             ),
           }}
         />
-      )}
+      )
+      }}
     />
     </div>
           <RouteControls onRouteTypeChange={props.onRouteTypeChange} activeRouteType={props.routeType}></RouteControls>
