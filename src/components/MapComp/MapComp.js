@@ -39,7 +39,7 @@ class MapComp extends Component {
     }})
   }
   zoomChangeHandler = (e)=>{
-    console.log('ss');
+    this.setState({zoom:e._zoom})
   }
 
   render() {
@@ -98,7 +98,8 @@ class MapComp extends Component {
   }
     return (
       <React.Fragment>
-          <Map center={center} zoom={this.state.zoom} onzoomlevelschange={(e)=>this.zoomChangeHandler(e)}>
+          <Map center={center} zoom={this.state.zoom} onzoomend={(e)=>{this.zoomChangeHandler(e);
+          console.log(e)}}>
       <TileLayer
         attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
         url="https://api.maptiler.com/maps/positron/{z}/{x}/{y}.png?key=u2fRkDnGTO0UDCKhxIIF"

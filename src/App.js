@@ -13,7 +13,7 @@ import RouteDetails from './components/RouteDetails/RouteDetails';
 class  App extends Component {
 
 state = {
-  selectedPlace: {geometry: {coordinates: [17.064855,51.107598]}},
+  selectedPlace: {geometry: {coordinates: [17.0312014,51.1104557]}, address: '50-107 Wroclaw, Rynek'},
   offers : [
     {id:1,name: 'Oferta1', address: 'Wrocław ul. Ptasia 11', coordinates: {lat: 51.121591, lng:17.029357},calculationRequired: true, paths:null},
     {id:2,name: 'Oferta2', address: 'Wrocław ul. Piwna 20', coordinates: {lat: 51.113956, lng:17.054883}, calculationRequired: true, paths:null},
@@ -46,9 +46,22 @@ onTargetMarketDragEndHanlder = (e)=>{
   
   axios.get(`http://photon.komoot.de/reverse?lon=${e.target._latlng.lng}&lat=${e.target._latlng.lat}`)
   .then(res=> {
-    let adddress = res.data.features[0].properties.city +', ul. '+ res.data.features[0].properties.street + ', '+ res.data.features[0].properties.housenumber
+    let newAddress = '';
+    if(res.data.features[0].properties.postcode){
+      newAddress = res.data.features[0].properties.postcode;
+    } 
+    if(res.data.features[0].properties.city){
+      newAddress = newAddress + ' ' + res.data.features[0].properties.city;
+    }
+    if(res.data.features[0].properties.street){
+      newAddress = newAddress + ', ' + res.data.features[0].properties.street
+    } 
+    if(res.data.features[0].properties.housenumber){
+      newAddress = newAddress + ', ' + res.data.features[0].properties.housenumber
+    }
+
     let newSelectedPlace = {
-      address:  adddress,
+      address:  newAddress,
       geometry: {coordinates: [e.target._latlng.lng,e.target._latlng.lat]},
       autocomplete: false
     }

@@ -12,7 +12,7 @@ import RouteControls from './../RouteControls/RouteControls.js';
 export default function Search(props) {
 const CancelToken = axios.CancelToken;
 let cancel;
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState('50-107 Wroclaw, Rynek');
   const [options, setOptions] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
