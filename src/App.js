@@ -26,7 +26,7 @@ state = {
       state: false,
       offerId: undefined
     },
-    routeType: 'car'
+    routeType: 'foot'
 }
 
 onTargetMarketDragEndHanlder = (e)=>{
