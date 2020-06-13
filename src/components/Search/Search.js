@@ -40,7 +40,7 @@ let cancel;
             setOptions(features);
         }).catch(e=>{
             if(axios.isCancel(e)){
-                console.log('request cancelled');
+              //  console.log('request cancelled');
             }
         })
       }, 500),
@@ -65,19 +65,20 @@ let cancel;
   }, [open]);
 
   React.useEffect(()=>{
-    console.log('zmiana ehehhe')
+   // console.log('zmiana ehehhe')
     if(props.selectedPlace.autocomplete === false){
     setInputValue(props.selectedPlace.address);
     }
   }, [props.selectedPlace])
 
   return (
-         <Grid container justify = "center"  >
-    <div>
+        //  <Grid container justify = "center"  >
+    <div className={classes.TopPanel}>
+      <div className={classes.SearchBox}>
     <Autocomplete
       value={inputValue}
       id="autocomplete"
-      style={{ width: 400,marginBottom:'30px', backgroundColor:"#FFFFFF"}}
+      style={{ width: 400,marginBottom:'30px', backgroundColor:"#FFFFFF", display:'inline'}}
       open={open}
       onClose={(event,reason)=>{
         setOpen(false);
@@ -122,9 +123,16 @@ let cancel;
         />
       )
       }}
+      
     />
+
+
+ 
     </div>
-          <RouteControls onRouteTypeChange={props.onRouteTypeChange} activeRouteType={props.routeType}></RouteControls>
-     </Grid>
+    <div className={classes.ControlsBox}>
+    <RouteControls onRouteTypeChange={props.onRouteTypeChange} activeRouteType={props.routeType}></RouteControls>
+    </div>
+    </div>
+    //  </Grid>
   );
 }

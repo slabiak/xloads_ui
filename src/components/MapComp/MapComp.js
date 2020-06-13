@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Map, TileLayer, Marker, GeoJSON, Circle} from 'react-leaflet';
+import { Map, TileLayer, Marker, GeoJSON, Circle, ZoomControl} from 'react-leaflet';
 import OfferModal from '../Offers/OfferModal/OfferModal';
 import iconTarget from '../../UI/marker/iconTarget';
+import Zoomcontrol from 'react-leaflet';
 
 class MapComp extends Component {
   state = {
-    zoom: 12,
+    zoom: 13,
     colors : ['grey','#73c93e'],
     showModal : false,
     modalOffer: null,
@@ -29,7 +30,7 @@ class MapComp extends Component {
       state: true,
       offerId: id
     }})
-    console.log('nad markerem nr' + this.state.hoveredMarker.offerId);
+   // console.log('nad markerem nr' + this.state.hoveredMarker.offerId);
   }
 
   onMouseOutOfMarkerHandler = () => {
@@ -98,8 +99,9 @@ class MapComp extends Component {
   }
     return (
       <React.Fragment>
-          <Map center={center} zoom={this.state.zoom} onzoomend={(e)=>{this.zoomChangeHandler(e);
-          console.log(e)}}>
+          <Map center={center} zoom={this.state.zoom} zoomControl={false} onzoomend={(e)=>{this.zoomChangeHandler(e);
+          //console.log(e)
+          }}>
       <TileLayer
         attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
         url="https://api.maptiler.com/maps/positron/{z}/{x}/{y}.png?key=u2fRkDnGTO0UDCKhxIIF"
@@ -108,6 +110,8 @@ class MapComp extends Component {
         {offersMarkers}
         {routes}
         {/* <Circle center={center} radius={5000}/>  */}
+        {this.props.children}
+        <ZoomControl position={'bottomright'}></ZoomControl>
     </Map>
       {modal}
      
@@ -162,7 +166,7 @@ var decodePath = function (encoded, is3D) {
       } else
           array.push([lng * 1e-5, lat * 1e-5]);
   }
-  console.log("decoded " + len);
+//  console.log("decoded " + len);
   return array;
 };
 
