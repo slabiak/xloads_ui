@@ -1,3 +1,13 @@
-.leaflet {
-    width: 100%;
+.Map{
+  display:flex;
+  flex: 1;
+  grid-area: map;
 }
+
+
+/* @media only screen and (min-width: 1270px)  {
+    .Map{
+        display:flex;
+    }
+    
+} */

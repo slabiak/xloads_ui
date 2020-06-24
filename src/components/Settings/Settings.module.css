@@ -1,0 +1,44 @@
+
+.Settings{
+    grid-area: settings;
+    background: #f2f4f5;
+}
+
+.SettingsBody{
+
+    background: #f2f4f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.Setting{
+}
+
+.SettingHeader{
+
+}
+
+.SettingBody{
+    display: flex;
+    flex-direction: row;
+    max-width: 200px;
+}
+
+.SettingsFooter{
+    display:flex;
+    margin: 10px;
+    justify-content: center;
+    max-height: 38px;
+    background: #f2f4f5;
+}
+
+@media screen and (min-width: 600px) {
+    .Settings{
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    }

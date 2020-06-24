@@ -12,37 +12,11 @@ function Offers(props) {
        <Offer mode={props.mode} key={offer.id} onMouseLeaveHandler={props.onMouseLeaveHandler} onMouseOverOfferHandler={props.onMouseOverOfferHandler} data={offer}></Offer>
     )
     return (
-        <div className={classes.LeftPane}>
-
-{/* <div className={classes.LeftPaneHeader}>
-        Header
-    </div> */}
-
-    <div className={classes.OffersBox}>
-      <div>
+        <div className={classes.Offers}>
+        <div className={classes.OffersHeader}>Znaleziono: 405</div>
         <ul className={classes.OffersItems}> 
             {offers}
         </ul>
-        </div>
-        {/* <div>
-            Pagination!
-        </div> */}
-    </div>
-    <div className={classes.LeftPaneFooter}>
-
-
-    <div className={classes.pagination}>
-  <a href="#">&laquo;</a>
-  <a className={classes.active} href="#">1</a>
-  <a href="#">2</a>
-  <a href="#">3</a>
-  <a href="#">4</a>
-  <a href="#">5</a>
-  <a href="#">6</a>
-  <a href="#">&raquo;</a>
-</div>
-
-    </div>
 
     </div>
     )

@@ -2,58 +2,14 @@
     padding: 0;
     list-style: none;
     align-items: center;
-    height: 100%;
-    width: 640px;
 }
-
-.OffersBox{
-    overflow-y: auto;
-    flex: auto;
-    /* margin-bottom: 50px; */
-}
-
-.LeftPaneHeader{
-    flex: none;
-    padding-bottom: 10px;
-    width: 512px;
-    background-color: #888888;
-}
-
-.LeftPaneFooter{
-    flex: none;
-    width:660px;
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.LeftPane{
-    /* position: absolute;
-    top: 0; */
-    width: 660px;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+.Offers{
     background-color: #F2F4F5;
+    grid-area: offers;
+    height: 100%;
+    overflow: auto;
 }
 
-.pagination {
-    display: inline-block;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .pagination a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-  }
-  
-  .pagination a.active {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .pagination a:hover:not(.active) {
-      background-color: #ddd;}
+.OffersHeader{
+    margin-left: 20px;
+}

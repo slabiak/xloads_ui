@@ -1,17 +1,18 @@
 .TopPanel {
-    position: relative;
-    background-color: white;
-    /* max-width: 700px; */
-    height: 80px;
-    padding:10px;
-    margin: 20px auto;
+    width: 100%;
     display: flex;
     align-items: center;
-    border-radius: 15px;
-    box-shadow: 0 0 10px gray;
-    z-index: 10001;
-    width: 630px;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-area: search;
+    background-color: #f2f4f5;
+
+}
+
+@media screen and (min-width: 1250px) {
+    .TopPanel {
+    display:flex;
+    }
 }
 
 /* .TopPanel {
@@ -32,13 +33,12 @@
 } */
 
 .SearchBox {
-/* display: inline-block; */
-/* width: 400px; */
-/* margin-left: 20px; */
-min-width: 400px;
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
 }
 
+
 .ControlsBox {
-    /* display: inline-block; */
-    /* margin-left: 50px; */
+    padding: 10px;
     }

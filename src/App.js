@@ -9,8 +9,10 @@ import axios from 'axios';
 import Slider from '@material-ui/core/Slider';
 import RouteDetails from './components/RouteDetails/RouteDetails';
 import classes from './App.module.css';
-
-
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Header from './components/Header/Header';
+import Settings from './components/Settings/Settings';
 class  App extends Component {
 
   backendPrefix = 'http://13.70.192.93:8087/';
@@ -189,20 +191,29 @@ componentDidUpdate(prevProps, prevState) {
   header
 </div> */}
 
-<div className={classes.MyContainer}> 
+<div className={classes.Container}> 
+<Header/>
+
+<Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> 
+<Settings/>
 
 <Offers mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers> 
-<div className={classes.Header}>
-   <button type="button" className="btn btn-success btn-sm">Dodaj ogłoszenie</button>
+<MapComp routeType={this.state.routeType} onTargetMarketDragEndHanlder={this.onTargetMarketDragEndHanlder} selectedPlace={this.state.selectedPlace} offers={this.state.offers} hooveredOffer={this.state.hooveredOffer}>
+</MapComp>
+
+<div className={classes.Pagination}>
+
+<div className={classes.pagination}>
+<a href="#">&laquo;</a>
+<a className={classes.active} href="#">1</a>
+<a href="#">2</a>
+<a href="#">3</a>
+<a href="#">4</a>
+<a href="#">5</a>
+<a href="#">6</a>
+<a href="#">&raquo;</a>
 </div>
 
-<div className={classes.RightPane}>
-  {/* <Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search>  */}
- 
-    <MapComp routeType={this.state.routeType} onTargetMarketDragEndHanlder={this.onTargetMarketDragEndHanlder} selectedPlace={this.state.selectedPlace} offers={this.state.offers} hooveredOffer={this.state.hooveredOffer}>
-    <Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> 
-
-</MapComp>
 </div>
 
 </div>

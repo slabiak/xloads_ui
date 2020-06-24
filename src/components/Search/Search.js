@@ -74,11 +74,14 @@ let cancel;
   return (
         //  <Grid container justify = "center"  >
     <div className={classes.TopPanel}>
+      <div className={classes.ControlsBox}>
+    <RouteControls onRouteTypeChange={props.onRouteTypeChange} activeRouteType={props.routeType}></RouteControls>
+    </div>
       <div className={classes.SearchBox}>
     <Autocomplete
       value={inputValue}
       id="autocomplete"
-      style={{ width: 400,marginBottom:'30px', backgroundColor:"#FFFFFF", display:'inline'}}
+      style={{}}
       open={open}
       onClose={(event,reason)=>{
         setOpen(false);
@@ -129,9 +132,7 @@ let cancel;
 
  
     </div>
-    <div className={classes.ControlsBox}>
-    <RouteControls onRouteTypeChange={props.onRouteTypeChange} activeRouteType={props.routeType}></RouteControls>
-    </div>
+    
     </div>
     //  </Grid>
   );

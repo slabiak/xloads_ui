@@ -85,9 +85,9 @@ function Offer(props) {
   </Col>
   </Row>
 </Card> */}
-<div className={classes.OfferBox}>
-    <div className={classes.OfferImg}>
-    <img src={props.data.img} width='216px' height='152px' />
+<div className={classes.Offer}>
+    <div className={classes.ImgContainer}>
+    <img className={classes.OfferImg} src={props.data.img}/>
     </div>
     <div className={classes.OfferBody}>
         <div className={classes.OfferHeader}>
@@ -97,10 +97,11 @@ function Offer(props) {
             <p className={classes.OfferPrice}>600 zł</p>
             {timeIcon} {spinner} {routeInfo}
         </div>
-        <div className={classes.OfferFooter}>
+    
+    </div>
+    <div className={classes.OfferFooter}>
         dodano {created}
         </div>
-    </div>
 
 {/* <p>
 

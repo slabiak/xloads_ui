@@ -3,6 +3,7 @@ import { Map, TileLayer, Marker, GeoJSON, Circle, ZoomControl} from 'react-leafl
 import OfferModal from '../Offers/OfferModal/OfferModal';
 import iconTarget from '../../UI/marker/iconTarget';
 import Zoomcontrol from 'react-leaflet';
+import classes from './MapComp.module.css';
 
 class MapComp extends Component {
   state = {
@@ -98,7 +99,7 @@ class MapComp extends Component {
    modal=<OfferModal onModalHideHandler={this.onModalHideHandler} show={this.state.showModal} offer={this.state.modalOffer} />
   }
     return (
-      <React.Fragment>
+      <div className={classes.Map}>
           <Map center={center} zoom={this.state.zoom} zoomControl={false} onzoomend={(e)=>{this.zoomChangeHandler(e);
           //console.log(e)
           }}>
@@ -115,7 +116,7 @@ class MapComp extends Component {
     </Map>
       {modal}
      
-      </React.Fragment>
+      </div>
     )
   }
 }
