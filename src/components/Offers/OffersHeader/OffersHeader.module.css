@@ -1,0 +1,45 @@
+.OffersHeader{
+    padding-left: 20px;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.ListTypeContainer{
+    padding-right: 15px;
+    height: 35px;
+}
+
+.ListType{
+    list-style: none;
+    margin-bottom: 0;
+    height: 100%;
+}
+
+.ListType li{
+    display: inline-block;
+    padding: 0 8px;
+    height: 100%;
+}
+
+.ListType .active{
+    display: inline-block;
+    padding: 0 8px;
+    background-color: #F2F4F5;
+    height: 100%;
+}
+
+.ListType li a{
+    text-decoration: none;
+    color: #444;
+}
+
+@media only screen and (min-width: 1270px)  {
+    .ListTypeContainer{
+        display: none;
+    }
+
+    .OffersHeader{
+        background-color: #F2F4F5;
+    }
+}

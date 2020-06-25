@@ -1,12 +1,14 @@
 
 .Settings{
     grid-area: settings;
-    background: #f2f4f5;
+    /* background: #f2f4f5; */
+    background-color: white;
 }
 
 .SettingsBody{
 
-    background: #f2f4f5;
+    /* background: #f2f4f5; */
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,8 +33,10 @@
     margin: 10px;
     justify-content: center;
     max-height: 38px;
-    background: #f2f4f5;
+    /* background: #f2f4f5; */
+    background-color: white;
 }
+
 
 @media screen and (min-width: 600px) {
     .Settings{
@@ -42,3 +46,22 @@
     }
 
     }
+
+    @media screen and (min-width: 1270px) {
+        .Settings{
+          background-color: #F2F4F5;
+        }
+
+        .SettingsBody{
+
+            background: #f2f4f5;
+        
+        }
+
+        .SettingsFooter{
+           
+            background: #f2f4f5;
+      
+        }
+    
+        }

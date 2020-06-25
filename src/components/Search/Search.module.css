@@ -5,13 +5,15 @@
     flex-wrap: wrap;
     justify-content: center;
     grid-area: search;
-    background-color: #f2f4f5;
+    /* background-color: #f2f4f5; */
+    background-color: white;
 
 }
 
 @media screen and (min-width: 1250px) {
     .TopPanel {
     display:flex;
+    background-color: #F2F4F5;
     }
 }
 

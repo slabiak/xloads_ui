@@ -86,8 +86,8 @@ function Offer(props) {
   </Row>
 </Card> */}
 <div className={classes.Offer}>
-    <div className={classes.ImgContainer}>
-    <img className={classes.OfferImg} src={props.data.img}/>
+    <div className={classes.ImgContainer} style={{backgroundImage:"url("+props.data.img+")"}}>
+    {/* <img className={classes.OfferImg} src={props.data.img}/> */}
     </div>
     <div className={classes.OfferBody}>
         <div className={classes.OfferHeader}>

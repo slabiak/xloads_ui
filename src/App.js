@@ -32,8 +32,15 @@ state = {
       state: false,
       offerId: undefined
     },
-    routeType: 'foot'
+    routeType: 'foot',
+    currentView: 'list'
 }
+
+onChangeViewHandler = (e,newView) => {
+  e.preventDefault();
+  this.setState({currentView: newView});
+}
+
 
 onTargetMarketDragEndHanlder = (e)=>{
   let newSelectedPlace = {
@@ -183,6 +190,10 @@ componentDidUpdate(prevProps, prevState) {
         label: '10km',
       },
     ];
+    let header = this.state.currentView === 'list'? <Header/> : null;
+    let offers = <Offers currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
+    let settings = this.state.currentView === 'list'? <Settings/> : null;
+    let search = this.state.currentView === 'list'? <Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
 
   return (
     <React.Fragment>
@@ -191,13 +202,11 @@ componentDidUpdate(prevProps, prevState) {
   header
 </div> */}
 
-<div className={classes.Container}> 
-<Header/>
-
-<Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> 
-<Settings/>
-
-<Offers mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers> 
+<div className={this.state.currentView==='list' ? classes.Container : classes.ContainerMap}> 
+{header}
+{search}
+{settings}
+{offers}
 <MapComp routeType={this.state.routeType} onTargetMarketDragEndHanlder={this.onTargetMarketDragEndHanlder} selectedPlace={this.state.selectedPlace} offers={this.state.offers} hooveredOffer={this.state.hooveredOffer}>
 </MapComp>
 
