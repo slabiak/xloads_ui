@@ -30,7 +30,7 @@ function Offer(props) {
     let spinner = null;
     let routeInfo = null;
     let created  =  moment(props.data.created).fromNow();
-    if(props.data.calculationRequired){
+    if(props.data.calculationRequired && props.data){
         spinner=<CircularProgress  size={20} />
     } else {
     
