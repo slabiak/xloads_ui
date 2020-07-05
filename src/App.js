@@ -13,6 +13,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Header from './components/Header/Header';
 import Settings from './components/Settings/Settings';
+
+import { BrowserRouter as Router } from "react-router-dom";
+
+
 class  App extends Component {
 
   backendPrefix = 'http://13.70.192.93:8087/';
@@ -21,11 +25,36 @@ class  App extends Component {
 state = {
   selectedPlace: {geometry: {coordinates: [17.0312014,51.1104557]}, address: '50-107 Wroclaw, Rynek'},
   offers : [
-    {id:1,created:1591523762000, name: 'Pokój jednoosobowy w mieszkaniu studenckim Wysoki standard',img:'https://ireland.apollo.olxcdn.com/v1/files/hqdhhbhhg8as3-PL/image;s=644x461', address: 'Wrocław ul. Ptasia 11', coordinates: {lat: 51.121591, lng:17.029357},calculationRequired: true, paths:null},
-    {id:2,created:1591523752000, name: 'Promocja!!! Pokoj przy skytower/Room next to skytower.',img:'https://ireland.apollo.olxcdn.com/v1/files/6gzyp1j42xzo3-PL/image;s=644x461', address: 'Wrocław ul. Piwna 20', coordinates: {lat: 51.113956, lng:17.054883}, calculationRequired: true, paths:null},
-    {id:3,created:1591523712000, name: 'Pokój 24m2 w ładnym standardzie', address: 'Wrocław ul. Makowa 33', img:'https://ireland.apollo.olxcdn.com/v1/files/6gzyp1j42xzo3-PL/image;s=644x461', coordinates: {lat: 51.092955, lng:16.990682}, calculationRequired: true, paths:null},
-    {id:4,created:1591514712000, name: 'OKAZJA 800 zł pokój 2-osobowy z balkonem na Biskupinie', img:'https://ireland.apollo.olxcdn.com/v1/files/20mytks0glf01-PL/image;s=644x461', address: 'Wrocław ul. Czarnieckiego 58', coordinates: {lat: 51.115950, lng:17.005621}, calculationRequired: true, paths:null},
-    {id:5,created:1591513562000,name: 'Pokój 1 osobowy koło Magnolii z ogródkiem', img:'https://ireland.apollo.olxcdn.com/v1/files/qwaxabjjcj14-PL/image;s=644x461', address: 'Wrocław ul. Kamienicka 40', coordinates: {lat: 51.078850, lng:17.061696}, calculationRequired: true, paths:null}
+    {id:1,created:1591523762000, title: 'Pokój jednoosobowy w mieszkaniu studenckim Wysoki standard',images:['https://ireland.apollo.olxcdn.com/v1/files/hqdhhbhhg8as3-PL/image;s=644x461'], address: {
+      streetNumber: "11",
+      route: "ul. Ptasia",
+      city: "Wroclaw",
+      postalCode: "30-35"
+      }, coordinates: {lat: 51.121591, lng:17.029357},calculationRequired: true, paths:null},
+    {id:2,created:1591523752000, title: 'Promocja!!! Pokoj przy skytower/Room next to skytower.',images:['https://ireland.apollo.olxcdn.com/v1/files/6gzyp1j42xzo3-PL/image;s=644x461'], address: {
+      streetNumber: "20",
+      route: "ul. Piwna",
+      city: "Wroclaw",
+      postalCode: "30-35"
+      }, coordinates: {lat: 51.113956, lng:17.054883}, calculationRequired: true, paths:null},
+    {id:3,created:1591523712000, title: 'Pokój 24m2 w ładnym standardzie', address: {
+      streetNumber: "33",
+      route: "ul. Makowa",
+      city: "Wroclaw",
+      postalCode: "30-35"
+      }, images:['https://ireland.apollo.olxcdn.com/v1/files/6gzyp1j42xzo3-PL/image;s=644x461'], coordinates: {lat: 51.092955, lng:16.990682}, calculationRequired: true, paths:null},
+    {id:4,created:1591514712000, title: 'OKAZJA 800 zł pokój 2-osobowy z balkonem na Biskupinie', images:['https://ireland.apollo.olxcdn.com/v1/files/20mytks0glf01-PL/image;s=644x461'], address: {
+      streetNumber: "58",
+      route: "ul. Czarnieckiego",
+      city: "Wroclaw",
+      postalCode: "30-35"
+      }, coordinates: {lat: 51.115950, lng:17.005621}, calculationRequired: true, paths:null},
+    {id:5,created:1591513562000, title: 'Pokój 1 osobowy koło Magnolii z ogródkiem', images:['https://ireland.apollo.olxcdn.com/v1/files/qwaxabjjcj14-PL/image;s=644x461'], address: {
+      streetNumber: "40",
+      route: "ul. Kamienicka",
+      city: "Wroclaw",
+      postalCode: "30-35"
+      }, coordinates: {lat: 51.078850, lng:17.061696}, calculationRequired: true, paths:null}
     ],
     currentRouteToFetch: 0,
     hooveredOffer:{
@@ -176,27 +205,14 @@ componentDidUpdate(prevProps, prevState) {
 
   render(){
 
-    const marks = [
-      {
-        value: 0,
-        label: '1km',
-      },
-      {
-        value: 50,
-        label: '5km'
-      },
-      {
-        value: 100,
-        label: '10km',
-      },
-    ];
+  
     let header = this.state.currentView === 'list'? <Header/> : null;
     let offers = <Offers currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
     let settings = this.state.currentView === 'list'? <Settings/> : null;
     let search = this.state.currentView === 'list'? <Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
 
   return (
-    <React.Fragment>
+    <Router>
    
    {/* <div className={classes.Header}>
   header
@@ -254,8 +270,7 @@ componentDidUpdate(prevProps, prevState) {
         </Col> 
       </Row>
     </Container> */}
-    </React.Fragment>
-
+</Router>
   );
   }
 }
