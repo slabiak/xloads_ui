@@ -94,7 +94,7 @@ function Offer(props) {
         <b>{props.data.title}</b>
         </div>
         <div className={classes.OfferDescription}>
-            <p className={classes.OfferPrice}>600 zł</p>
+            <p className={classes.OfferPrice}>{props.data.price} zł</p>
             {timeIcon} {spinner} {routeInfo}
         </div>
     

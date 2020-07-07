@@ -19,7 +19,7 @@ function Offers(props) {
 
     return (
         <div className={classes.Offers}>
-        <OffersHeader currentView = {props.currentView} onChangeViewHandler={props.onChangeViewHandler}/>
+        <OffersHeader numberOfOffers={props.numberOfOffers} currentView = {props.currentView} onChangeViewHandler={props.onChangeViewHandler}/>
         <ul className={classes.OffersItems}> 
             {offers}
         </ul>

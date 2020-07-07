@@ -5,7 +5,7 @@ function Offers(props) {
 
     return (
         <div className={classes.OffersHeader}>
-            <div>Znaleziono: 405</div>
+            <div>Znaleziono: {props.numberOfOffers}</div>
             <div className={classes.ListTypeContainer}>
                 <ul className={classes.ListType}>
                 <li className={props.currentView==='map'? classes.active:''}><a href="" onClick={(e)=> props.onChangeViewHandler(e,'map')}>Mapa</a></li>

@@ -13,7 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Header from './components/Header/Header';
 import Settings from './components/Settings/Settings';
-
+import {Pagination} from '@material-ui/lab';
 import { BrowserRouter as Router } from "react-router-dom";
 
 
@@ -22,39 +22,6 @@ class  App extends Component {
   backendPrefix = 'http://13.70.192.93:8087/';
   apiPrefix = 'http://localhost:8080/'
 // backendPrefix = 'http://localhost:8087/'
-
-// offers : [
-//   {id:1,created:1591523762000, title: 'Pokój jednoosobowy w mieszkaniu studenckim Wysoki standard',images:['https://ireland.apollo.olxcdn.com/v1/files/hqdhhbhhg8as3-PL/image;s=644x461'], address: {
-//     streetNumber: "11",
-//     route: "ul. Ptasia",
-//     city: "Wroclaw",
-//     postalCode: "30-35"
-//     }, coordinates: {lat: 51.121591, lng:17.029357},calculationRequired: true, paths:null},
-//   {id:2,created:1591523752000, title: 'Promocja!!! Pokoj przy skytower/Room next to skytower.',images:['https://ireland.apollo.olxcdn.com/v1/files/6gzyp1j42xzo3-PL/image;s=644x461'], address: {
-//     streetNumber: "20",
-//     route: "ul. Piwna",
-//     city: "Wroclaw",
-//     postalCode: "30-35"
-//     }, coordinates: {lat: 51.113956, lng:17.054883}, calculationRequired: true, paths:null},
-//   {id:3,created:1591523712000, title: 'Pokój 24m2 w ładnym standardzie', address: {
-//     streetNumber: "33",
-//     route: "ul. Makowa",
-//     city: "Wroclaw",
-//     postalCode: "30-35"
-//     }, images:['https://ireland.apollo.olxcdn.com/v1/files/6gzyp1j42xzo3-PL/image;s=644x461'], coordinates: {lat: 51.092955, lng:16.990682}, calculationRequired: true, paths:null},
-//   {id:4,created:1591514712000, title: 'OKAZJA 800 zł pokój 2-osobowy z balkonem na Biskupinie', images:['https://ireland.apollo.olxcdn.com/v1/files/20mytks0glf01-PL/image;s=644x461'], address: {
-//     streetNumber: "58",
-//     route: "ul. Czarnieckiego",
-//     city: "Wroclaw",
-//     postalCode: "30-35"
-//     }, coordinates: {lat: 51.115950, lng:17.005621}, calculationRequired: true, paths:null},
-//   {id:5,created:1591513562000, title: 'Pokój 1 osobowy koło Magnolii z ogródkiem', images:['https://ireland.apollo.olxcdn.com/v1/files/qwaxabjjcj14-PL/image;s=644x461'], address: {
-//     streetNumber: "40",
-//     route: "ul. Kamienicka",
-//     city: "Wroclaw",
-//     postalCode: "30-35"
-//     }, coordinates: {lat: 51.078850, lng:17.061696}, calculationRequired: true, paths:null}
-//   ]
 
 state = {
   selectedPlace: {geometry: {coordinates: [17.0312014,51.1104557]}, address: '50-107 Wroclaw, Rynek'},
@@ -65,8 +32,60 @@ state = {
       offerId: undefined
     },
     routeType: 'foot',
-    currentView: 'list'
+    currentView: 'list',
+    totalPages: 0,
+    currentPage: 0,
+    numberOfOffers: 0,
+    category: 'room',
+    sortBy: 'created.desc',
+    priceFrom: 0,
+    priceTo: 10000
 }
+
+onSearchButonClickedHandler = (event,values)=>{
+  event.preventDefault();
+  let newPriceFrom = values.priceFrom != '' ? values.priceFrom : 0;
+  let newPriceTo = values.priceTo != '' ? values.priceTo : 10000;
+
+  let apiUrl = `${this.apiPrefix}api/offer/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${values.sortBy}`;
+  axios.get(apiUrl)
+  .then(res=> {
+    let fetchedOffers = res.data.content.map(offer => {
+        let o = {
+      
+          ...offer,
+          calculationRequired:true
+  
+        }
+        return o;
+    }) 
+    this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
+      category: values.category,
+      sortBy: values.sortBy,
+      priceFrom: newPriceFrom,
+      priceTo: newPriceTo});
+  });
+
+}
+
+
+onChangePageHandler = (event, value) => {
+  let apiUrl = `${this.apiPrefix}api/offer/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
+  axios.get(apiUrl)
+  .then(res=> {
+    let fetchedOffers = res.data.content.map(offer => {
+        let o = {
+      
+          ...offer,
+          calculationRequired:true
+  
+        }
+        return o;
+    }) 
+    this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number+1});
+  });
+  
+};
 
 onChangeViewHandler = (e,newView) => {
   e.preventDefault();
@@ -162,10 +181,10 @@ onRouteTypeChange = (newRouteType)=>{
 componentDidMount(){
   
 
-  let apiUrl = `${this.apiPrefix}api/offer`;
+  let apiUrl = `${this.apiPrefix}api/offer/page?limit=5&page=0&price_gte=${0}&price_lte=${10000}&sort_by=${this.state.sortBy}`;
   axios.get(apiUrl)
   .then(res=> {
-    let fetchedOffers = res.data.map(offer => {
+    let fetchedOffers = res.data.content.map(offer => {
         let o = {
       
           ...offer,
@@ -174,7 +193,7 @@ componentDidMount(){
         }
         return o;
     }) 
-    this.setState({offers : fetchedOffers, currentRouteToFetch:0});
+    this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements});
   });
   //  let apiUrl = `${this.backendPrefix}route/${this.state.routeType}?fromLat=${this.state.offers[0].coordinates.lat}&fromLng=${this.state.offers[0].coordinates.lng}&toLat=${this.state.selectedPlace.geometry.coordinates[1]}&toLng=${this.state.selectedPlace.geometry.coordinates[0]}&depTime=2020-05-23T10:15:30`;
   //   axios.get(apiUrl)
@@ -223,8 +242,8 @@ componentDidUpdate(prevProps, prevState) {
 
   
     let header = this.state.currentView === 'list'? <Header/> : null;
-    let offers = <Offers currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
-    let settings = this.state.currentView === 'list'? <Settings/> : null;
+    let offers = <Offers numberOfOffers={this.state.numberOfOffers} currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
+    let settings = this.state.currentView === 'list'? <Settings onButtonClicked={this.onSearchButonClickedHandler}/> : null;
     let search = this.state.currentView === 'list'? <Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
 
   return (
@@ -245,14 +264,16 @@ componentDidUpdate(prevProps, prevState) {
 <div className={classes.Pagination}>
 
 <div className={classes.pagination}>
-<a href="#">&laquo;</a>
+{/* <a href="#">&laquo;</a>
 <a className={classes.active} href="#">1</a>
 <a href="#">2</a>
 <a href="#">3</a>
 <a href="#">4</a>
 <a href="#">5</a>
 <a href="#">6</a>
-<a href="#">&raquo;</a>
+<a href="#">&raquo;</a> */}
+      <Pagination color="primary" count={this.state.totalPages} page={this.state.currentPage} onChange={this.onChangePageHandler} />
+
 </div>
 
 </div>
