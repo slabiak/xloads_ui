@@ -37,8 +37,8 @@ function RouteControls (props) {
      <div className={classes.SettingHeader}>Kategoria:</div>
      <div className={classes.SettingBody}>
      <select className="custom-select" id="category" onChange={e=>handleCategoryChange(e)} value={category}>
-    <option value="room">Pokoje</option>
-    <option value="flat">Mieszkania</option>
+    <option value="1">Pokoje</option>
+    <option value="2">Mieszkania</option>
 
   </select>
      </div>

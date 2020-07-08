@@ -7,7 +7,7 @@ import classes from './MapComp.module.css';
 
 class MapComp extends Component {
   state = {
-    zoom: 13,
+    zoom: 12,
     colors : ['grey','#73c93e'],
     showModal : false,
     modalOffer: null,

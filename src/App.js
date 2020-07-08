@@ -36,7 +36,7 @@ state = {
     totalPages: 0,
     currentPage: 0,
     numberOfOffers: 0,
-    category: 'room',
+    category: '1',
     sortBy: 'created.desc',
     priceFrom: 0,
     priceTo: 10000
@@ -47,7 +47,7 @@ onSearchButonClickedHandler = (event,values)=>{
   let newPriceFrom = values.priceFrom != '' ? values.priceFrom : 0;
   let newPriceTo = values.priceTo != '' ? values.priceTo : 10000;
 
-  let apiUrl = `${this.apiPrefix}api/offer/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${values.sortBy}`;
+  let apiUrl = `${this.apiPrefix}api/offer/category/${values.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${values.sortBy}`;
   axios.get(apiUrl)
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
@@ -70,7 +70,7 @@ onSearchButonClickedHandler = (event,values)=>{
 
 
 onChangePageHandler = (event, value) => {
-  let apiUrl = `${this.apiPrefix}api/offer/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
+  let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
   axios.get(apiUrl)
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
@@ -181,7 +181,7 @@ onRouteTypeChange = (newRouteType)=>{
 componentDidMount(){
   
 
-  let apiUrl = `${this.apiPrefix}api/offer/page?limit=5&page=0&price_gte=${0}&price_lte=${10000}&sort_by=${this.state.sortBy}`;
+  let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=0&price_gte=${0}&price_lte=${10000}&sort_by=${this.state.sortBy}`;
   axios.get(apiUrl)
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
