@@ -7,7 +7,7 @@ import {Dropdown, DropdownButton} from 'react-bootstrap';
 
 function RouteControls (props) {
 
-   const [category, setCategory] = React.useState('room');
+   const [category, setCategory] = React.useState('1');
    const [sortBy, setSortBy] = React.useState('created.desc');
    const[priceFrom, setPriceFrom] = React.useState('');
    const[priceTo, setPriceTo] = React.useState('');
