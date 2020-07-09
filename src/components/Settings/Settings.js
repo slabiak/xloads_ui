@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import classes from './Settings.module.css';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
@@ -11,7 +11,6 @@ function RouteControls (props) {
    const [sortBy, setSortBy] = React.useState('created.desc');
    const[priceFrom, setPriceFrom] = React.useState('');
    const[priceTo, setPriceTo] = React.useState('');
-
 
    const handleCategoryChange = (event) => {
      setCategory(event.target.value);
@@ -28,6 +27,10 @@ function RouteControls (props) {
     const handlePriceToChange = (event) => {
       setPriceTo(event.target.value);
     };
+
+    useEffect(() => {
+      props.onSettingsChanged({category:category,sortBy:sortBy,priceFrom:priceFrom,priceTo:priceTo});
+    }, [category,sortBy,priceFrom,priceTo]); // Uruchom ponownie efekt tylko wtedy, gdy zmieni się wartość count
 
        return (
        <div className={classes.Settings}>
@@ -69,9 +72,9 @@ function RouteControls (props) {
   
  
   </div>
-<div className={classes.SettingsFooter}>
+{/* <div className={classes.SettingsFooter}>
   <button type="button" className="btn btn-success btn-md" onClick={(event)=>props.onButtonClicked(event,{category:category,sortBy:sortBy,priceFrom:priceFrom,priceTo:priceTo})}>Szukaj</button> 
-  </div>
+  </div> */}
    </div>
 
        )

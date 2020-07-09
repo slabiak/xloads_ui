@@ -42,12 +42,12 @@ state = {
     priceTo: 10000
 }
 
-onSearchButonClickedHandler = (event,values)=>{
-  event.preventDefault();
-  let newPriceFrom = values.priceFrom != '' ? values.priceFrom : 0;
-  let newPriceTo = values.priceTo != '' ? values.priceTo : 10000;
+onSettingsChanged = (newSettings)=>{
+ 
+  let newPriceFrom = newSettings.priceFrom != '' ? newSettings.priceFrom : 0;
+  let newPriceTo = newSettings.priceTo != '' ? newSettings.priceTo : 10000;
 
-  let apiUrl = `${this.apiPrefix}api/offer/category/${values.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${values.sortBy}`;
+  let apiUrl = `${this.apiPrefix}api/offer/category/${newSettings.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${newSettings.sortBy}`;
   axios.get(apiUrl)
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
@@ -60,13 +60,36 @@ onSearchButonClickedHandler = (event,values)=>{
         return o;
     }) 
     this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
-      category: values.category,
-      sortBy: values.sortBy,
+      category: newSettings.category,
+      sortBy: newSettings.sortBy,
       priceFrom: newPriceFrom,
       priceTo: newPriceTo});
   });
 
 }
+
+// fetchOffers = ()=>{
+//   let newPriceFrom = this.state.priceFrom != '' ? this.state.priceFrom : 0;
+//   let newPriceTo = this.state.priceTo != '' ? this.state.priceTo : 10000;
+
+//   let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${this.state.sortBy}`;
+//   axios.get(apiUrl)
+//   .then(res=> {
+//     let fetchedOffers = res.data.content.map(offer => {
+//         let o = {
+      
+//           ...offer,
+//           calculationRequired:true
+  
+//         }
+//         return o;
+//     }) 
+//     this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
+//       sortBy: values.sortBy,
+//       priceFrom: newPriceFrom,
+//       priceTo: newPriceTo});
+//   });
+// }
 
 
 onChangePageHandler = (event, value) => {
@@ -243,7 +266,7 @@ componentDidUpdate(prevProps, prevState) {
   
     let header = this.state.currentView === 'list'? <Header/> : null;
     let offers = <Offers numberOfOffers={this.state.numberOfOffers} currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
-    let settings = this.state.currentView === 'list'? <Settings onButtonClicked={this.onSearchButonClickedHandler}/> : null;
+    let settings = this.state.currentView === 'list'? <Settings onSettingsChanged={this.onSettingsChanged}/> : null;
     let search = this.state.currentView === 'list'? <Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
 
   return (
