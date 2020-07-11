@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './OffersHeader.module.css';
 
-function Offers(props) {
+function OffersHeader(props) {
 
     return (
         <div className={classes.OffersHeader}>
@@ -16,4 +16,4 @@ function Offers(props) {
     )
 }
 
-export default Offers;
+export default OffersHeader;

@@ -1,23 +1,26 @@
 
 
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import classes from './Settings.module.css';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
 
 function RouteControls (props) {
-
+   const isFirstRun = useRef(true);
    const [category, setCategory] = React.useState('1');
    const [sortBy, setSortBy] = React.useState('created.desc');
    const[priceFrom, setPriceFrom] = React.useState('');
    const[priceTo, setPriceTo] = React.useState('');
+   const[flag,flipFlag] = React.useState(false);
 
    const handleCategoryChange = (event) => {
      setCategory(event.target.value);
+     flipFlag(!flag);
    };
 
    const handleSortingChange = (event) => {
       setSortBy(event.target.value);
+      flipFlag(!flag);
     };
 
     const handlePriceFromChange = (event) => {
@@ -28,9 +31,21 @@ function RouteControls (props) {
       setPriceTo(event.target.value);
     };
 
+    const handlePriceToBlur = ()=>{
+      flipFlag(!flag);
+    }
+
+    const handlePriceFromBlur = ()=>{
+      flipFlag(!flag);
+    }
+
     useEffect(() => {
+      if (isFirstRun.current) {
+         isFirstRun.current = false;
+         return;
+       }
       props.onSettingsChanged({category:category,sortBy:sortBy,priceFrom:priceFrom,priceTo:priceTo});
-    }, [category,sortBy,priceFrom,priceTo]); // Uruchom ponownie efekt tylko wtedy, gdy zmieni się wartość count
+    }, [flag]);
 
        return (
        <div className={classes.Settings}>
@@ -61,8 +76,9 @@ function RouteControls (props) {
 <div class={classes.Setting}>
      <div className={classes.SettingHeader}>Cena</div>
      <div className={classes.SettingBody}>
-     <input type="number" className="form-control" id="priceFrom" placeholder="Od" onChange={e=>handlePriceFromChange(e)} value={priceFrom}></input>
-     <input type="number" className="form-control" id="priceTo" placeholder="Do" onChange={e=>handlePriceToChange(e)} value={priceTo}></input>
+     
+     <div className={classes.FormWrapper}><input type="number" className='form-control' id="priceFrom" placeholder="Od" onBlur={handlePriceFromBlur} onChange={e=>handlePriceFromChange(e)} value={priceFrom}></input></div>
+     <div className={classes.FormWrapper}><input type="number" className='form-control' id="priceTo" placeholder="Do" onBlur={handlePriceToBlur} onChange={e=>handlePriceToChange(e)} value={priceTo}></input></div>
      </div>
   </div>
   

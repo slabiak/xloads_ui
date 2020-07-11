@@ -2,15 +2,9 @@ import React , {Component} from 'react';
 import Search from './components/Search/Search';
 import './App.css';
 import MapComp from './components/MapComp/MapComp';
-import { Container, Row , Col, Navbar, Nav, NavDropdown}  from 'react-bootstrap';
-import { red } from '@material-ui/core/colors';
 import Offers from './components/Offers/Offers';
 import axios from 'axios';
-import Slider from '@material-ui/core/Slider';
-import RouteDetails from './components/RouteDetails/RouteDetails';
 import classes from './App.module.css';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import Header from './components/Header/Header';
 import Settings from './components/Settings/Settings';
 import {Pagination} from '@material-ui/lab';
@@ -19,12 +13,13 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 class  App extends Component {
 
+  offersApiTimeout = 3000;
   backendPrefix = 'http://13.70.192.93:8087/';
   apiPrefix = 'http://localhost:8080/'
 // backendPrefix = 'http://localhost:8087/'
 
 state = {
-  selectedPlace: {geometry: {coordinates: [17.0312014,51.1104557]}, address: '50-107 Wroclaw, Rynek'},
+    selectedPlace: {geometry: {coordinates: [17.0312014,51.1104557]}, address: '50-107 Wroclaw, Rynek'},
     offers: [],
     currentRouteToFetch: -1,
     hooveredOffer:{
@@ -39,16 +34,18 @@ state = {
     category: '1',
     sortBy: 'created.desc',
     priceFrom: 0,
-    priceTo: 10000
+    priceTo: 10000,
+    offersRequestState: {
+      loading: true,
+      responseCode: 0
+        }
 }
 
-onSettingsChanged = (newSettings)=>{
- 
-  let newPriceFrom = newSettings.priceFrom != '' ? newSettings.priceFrom : 0;
-  let newPriceTo = newSettings.priceTo != '' ? newSettings.priceTo : 10000;
+onRetryButtonClicked = ()=> {
+  this.setState({offersRequestState:{loading: true, responseCode: 0}, offers: []});
 
-  let apiUrl = `${this.apiPrefix}api/offer/category/${newSettings.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${newSettings.sortBy}`;
-  axios.get(apiUrl)
+  let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=${this.state.currentPage-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
+  axios.get(apiUrl, {timeout: this.offersApiTimeout})
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
         let o = {
@@ -60,41 +57,27 @@ onSettingsChanged = (newSettings)=>{
         return o;
     }) 
     this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
-      category: newSettings.category,
-      sortBy: newSettings.sortBy,
-      priceFrom: newPriceFrom,
-      priceTo: newPriceTo});
-  });
-
+      offersRequestState: {loading: false,responseCode: res.status}});
+  }).catch(e=>{
+    if (e.response) {
+      this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
+    } else if (e.request) {
+      this.setState({offersRequestState: {loading: false,responseCode: 1001}});
+  }});
 }
 
-// fetchOffers = ()=>{
-//   let newPriceFrom = this.state.priceFrom != '' ? this.state.priceFrom : 0;
-//   let newPriceTo = this.state.priceTo != '' ? this.state.priceTo : 10000;
+onSettingsChanged = (newSettings)=>{
+  let newPriceFrom = newSettings.priceFrom != '' ? newSettings.priceFrom : 0;
+  let newPriceTo = newSettings.priceTo != '' ? newSettings.priceTo : 10000;
 
-//   let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${this.state.sortBy}`;
-//   axios.get(apiUrl)
-//   .then(res=> {
-//     let fetchedOffers = res.data.content.map(offer => {
-//         let o = {
-      
-//           ...offer,
-//           calculationRequired:true
-  
-//         }
-//         return o;
-//     }) 
-//     this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
-//       sortBy: values.sortBy,
-//       priceFrom: newPriceFrom,
-//       priceTo: newPriceTo});
-//   });
-// }
+  this.setState({offersRequestState:{loading: true, responseCode: 0}, offers: [],category: newSettings.category,
+    sortBy: newSettings.sortBy,
+    priceFrom: newPriceFrom,
+    priceTo: newPriceTo,});
 
 
-onChangePageHandler = (event, value) => {
-  let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
-  axios.get(apiUrl)
+  let apiUrl = `${this.apiPrefix}api/offer/category/${newSettings.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${newSettings.sortBy}`;
+  axios.get(apiUrl, {timeout: this.offersApiTimeout})
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
         let o = {
@@ -105,8 +88,45 @@ onChangePageHandler = (event, value) => {
         }
         return o;
     }) 
-    this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number+1});
-  });
+   
+
+    this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
+      offersRequestState: {loading: false,responseCode: res.status}});
+  }).catch(e=>{
+    if (e.response) {
+      this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
+    } else if (e.request) {
+      this.setState({offersRequestState: {loading: false,responseCode: 1001}});
+  }});
+
+}
+
+
+onChangePageHandler = (event, value) => {
+  this.setState({offersRequestState: {loading: true,responseCode: 0}, offers:[], currentPage:value});
+
+
+  let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
+  axios.get(apiUrl,{timeout: this.offersApiTimeout})
+  .then(res=> {
+    let fetchedOffers = res.data.content.map(offer => {
+        let o = {
+      
+          ...offer,
+          calculationRequired:true
+  
+        }
+        return o;
+    }) 
+    this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number+1, offersRequestState: {loading: false,responseCode: res.status}});
+    window.scrollTo(0, 0)
+
+  }).catch(e=>{
+    if (e.response) {
+      this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
+    } else if (e.request) {
+      this.setState({offersRequestState: {loading: false,responseCode: 1001}});
+  }});
   
 };
 
@@ -202,39 +222,23 @@ onRouteTypeChange = (newRouteType)=>{
 }
 
 componentDidMount(){
-  
-
   let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=0&price_gte=${0}&price_lte=${10000}&sort_by=${this.state.sortBy}`;
-  axios.get(apiUrl)
+  axios.get(apiUrl,{timeout: this.offersApiTimeout})
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
         let o = {
-      
           ...offer,
           calculationRequired:true
-  
         }
         return o;
     }) 
-    this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements});
-  });
-  //  let apiUrl = `${this.backendPrefix}route/${this.state.routeType}?fromLat=${this.state.offers[0].coordinates.lat}&fromLng=${this.state.offers[0].coordinates.lng}&toLat=${this.state.selectedPlace.geometry.coordinates[1]}&toLng=${this.state.selectedPlace.geometry.coordinates[0]}&depTime=2020-05-23T10:15:30`;
-  //   axios.get(apiUrl)
-  //   .then(res=> {
-  //     let offersCopy = this.state.offers;
-  //     let stOffer = offersCopy[0];
-  //     stOffer.paths = res.data;
-  //     stOffer.calculationRequired = false;
-  //     offersCopy[0] = stOffer;
-  //     if(this.state.offers.length>1){
-  //     this.setState({offers : offersCopy, currentRouteToFetch: 1})
-  //     } else {
-  //       this.setState({offers : offersCopy})
-  //     }
-  //   })
-
-   
-
+    this.setState({offersRequestState: {loading: false,responseCode: res.status},offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements});
+  }).catch(e=>{
+    if (e.response) {
+      this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
+    } else if (e.request) {
+      this.setState({offersRequestState: {loading: false,responseCode: 1001}});
+  }});
 }
 
 componentDidUpdate(prevProps, prevState) {
@@ -265,17 +269,12 @@ componentDidUpdate(prevProps, prevState) {
 
   
     let header = this.state.currentView === 'list'? <Header/> : null;
-    let offers = <Offers numberOfOffers={this.state.numberOfOffers} currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
+    let offers = <Offers onRetryButtonClicked={this.onRetryButtonClicked} offersRequestState={this.state.offersRequestState} numberOfOffers={this.state.numberOfOffers} currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
     let settings = this.state.currentView === 'list'? <Settings onSettingsChanged={this.onSettingsChanged}/> : null;
     let search = this.state.currentView === 'list'? <Search selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
 
   return (
     <Router>
-   
-   {/* <div className={classes.Header}>
-  header
-</div> */}
-
 <div className={this.state.currentView==='list' ? classes.Container : classes.ContainerMap}> 
 {header}
 {search}
@@ -287,14 +286,7 @@ componentDidUpdate(prevProps, prevState) {
 <div className={classes.Pagination}>
 
 <div className={classes.pagination}>
-{/* <a href="#">&laquo;</a>
-<a className={classes.active} href="#">1</a>
-<a href="#">2</a>
-<a href="#">3</a>
-<a href="#">4</a>
-<a href="#">5</a>
-<a href="#">6</a>
-<a href="#">&raquo;</a> */}
+
       <Pagination color="primary" count={this.state.totalPages} page={this.state.currentPage} onChange={this.onChangePageHandler} />
 
 </div>
@@ -302,34 +294,6 @@ componentDidUpdate(prevProps, prevState) {
 </div>
 
 </div>
-
-{/* 
-   <Navbar bg="light" expand="lg" style={{  position: 'sticky',top: 0, zIndex:100}}>
-  <Navbar.Brand href="#home">Nazwa</Navbar.Brand>
-  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-  <Navbar.Collapse id="basic-navbar-nav">
-    <Nav className="mr-auto">
-      <Nav.Link href="#home">Strona główna</Nav.Link>
-      <Nav.Link href="#link">Oferty</Nav.Link>
-    </Nav>
-  </Navbar.Collapse>
-</Navbar>
-
-    <Container >
-      <Row> 
-        <Col md={5}></Col>
-        <Col md={7} >
-          <div className='sticky-top' style={{top:'86px'}}>
-        <Row>
-          </Row>
-        
-          <Row>
-            <RouteDetails paths={this.state.offers[0].paths != null? this.state.offers[0].paths:null}></RouteDetails>
-          </Row>
-         </div>
-        </Col> 
-      </Row>
-    </Container> */}
 </Router>
   );
   }

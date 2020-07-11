@@ -4,7 +4,7 @@
     .Container{
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: 40px 120px auto auto 50px;
+        grid-template-rows: 40px 120px 155px auto 50px;
         grid-template-areas: "header"
                              "search"
                              "settings"
@@ -61,7 +61,7 @@
 
       @media only screen and (min-width: 600px)  {
         .Container{
-            grid-template-rows: 40px auto auto auto 50px;
+            grid-template-rows: 40px 120px 155px auto 50px;
         }
     }
 

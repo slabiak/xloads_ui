@@ -8,6 +8,20 @@
     grid-area: offers;
     height: 100%;
     overflow: auto;
+    min-height: calc(100vh - 365px);
+    display: flex;
+    flex-direction: column;
+}
+
+.SpinnerWrapper{
+align-self: center;
+justify-self: center;
+margin-bottom: auto;
+margin-top: auto;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 }
 
 
