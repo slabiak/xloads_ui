@@ -22,8 +22,8 @@ function RouteControls (props) {
 
             <div>
 
-            <a href="">Dodaj ogłoszenie</a>
-     <a href="">Kontakt</a>
+           
+     <a href="mailto:contact@nearprops.com">Kontakt</a>
             </div>
 
 

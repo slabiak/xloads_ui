@@ -11,15 +11,10 @@ import { Modal, Button} from 'react-bootstrap';
 import {Pagination} from '@material-ui/lab';
 import { BrowserRouter as Router } from "react-router-dom";
 import {calculateBoundingBox, isWithinBoundingBox} from './util/LatLngUtil';
+import config from './config';
 
 class  App extends Component {
 
-  boundingBox = []
-  offersApiTimeout = 3000;
-  routingApiTimeout = 3000;
-  backendPrefix = 'http://13.70.192.93:8087/';
-  apiPrefix = 'http://localhost:8080/'
-// backendPrefix = 'http://localhost:8087/'
 
 state = {
     currentSearchRegion : {name:'Wrocław', boundingBox: calculateBoundingBox([17.0323709,51.1106956],15)},
@@ -33,7 +28,7 @@ state = {
     routeType: 'foot',
     currentView: 'list',
     totalPages: 0,
-    currentPage: 0,
+    currentPage: 1,
     numberOfOffers: 0,
     category: '1',
     sortBy: 'created.desc',
@@ -61,8 +56,8 @@ onRecalculateRoutesHandler = (e)=>{
 onRetryButtonClicked = ()=> {
   this.setState({offersRequestState:{loading: true, responseCode: 0}, offers: []});
 
-  let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=${this.state.currentPage-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
-  axios.get(apiUrl, {timeout: this.offersApiTimeout})
+  let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=${this.state.currentPage-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
+  axios.get(apiUrl, {timeout: config.OFFERS_API_TIMEOUT})
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
         let o = {
@@ -93,8 +88,8 @@ onSettingsChanged = (newSettings)=>{
     priceTo: newPriceTo,});
 
 
-  let apiUrl = `${this.apiPrefix}api/offer/category/${newSettings.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${newSettings.sortBy}`;
-  axios.get(apiUrl, {timeout: this.offersApiTimeout})
+  let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${newSettings.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${newSettings.sortBy}`;
+  axios.get(apiUrl, {timeout: config.OFFERS_API_TIMEOUT})
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
         let o = {
@@ -129,8 +124,8 @@ onChangePageHandler = (event, value) => {
       }});
 
 
-  let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
-  axios.get(apiUrl,{timeout: this.offersApiTimeout})
+  let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
+  axios.get(apiUrl,{timeout: config.OFFERS_API_TIMEOUT})
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
         let o = {
@@ -176,7 +171,7 @@ onTargetMarketDragEndHanlder = (e)=>{
   }
   this.setState({selectedPlace: newSelectedPlace,currentRouteToFetch:0, offers: offersWithClearedRoutes})
   
-  axios.get(`http://photon.komoot.de/reverse?lon=${e.target._latlng.lng}&lat=${e.target._latlng.lat}`)
+  axios.get(config.MAP_API_PREFIX + `/api/place/reverse?lng=${e.target._latlng.lng}&lat=${e.target._latlng.lat}`,{timeout:config.MAP_API_TIMEOUT})
   .then(res=> {
 
     let newSelectedPlace = {
@@ -241,8 +236,8 @@ onRouteTypeChange = (newRouteType)=>{
 }
 
 componentDidMount(){
-  let apiUrl = `${this.apiPrefix}api/offer/category/${this.state.category}/page?limit=5&page=0&price_gte=${0}&price_lte=${10000}&sort_by=${this.state.sortBy}`;
-  axios.get(apiUrl,{timeout: this.offersApiTimeout})
+  let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=0&price_gte=${0}&price_lte=${10000}&sort_by=${this.state.sortBy}`;
+  axios.get(apiUrl,{timeout: config.OFFERS_API_TIMEOUT})
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
         let o = {
@@ -263,8 +258,8 @@ componentDidMount(){
 componentDidUpdate(prevProps, prevState) {
   if(this.state.offers.length>0 && prevState.currentRouteToFetch !== this.state.currentRouteToFetch && this.state.currentRouteToFetch>=0) {
     setTimeout(() => { 
-      let apiUrl = `${this.backendPrefix}route/${this.state.routeType}?fromLat=${this.state.offers[this.state.currentRouteToFetch].coordinates.lat}&fromLng=${this.state.offers[this.state.currentRouteToFetch].coordinates.lng}&toLat=${this.state.selectedPlace.geometry.coordinates[1]}&toLng=${this.state.selectedPlace.geometry.coordinates[0]}&depTime=2020-05-23T10:15:30`;
-    axios.get(apiUrl,{timeout:this.routingApiTimeout})
+      let apiUrl = `${config.MAP_API_PREFIX}/api/route/${this.state.routeType}?fromLat=${this.state.offers[this.state.currentRouteToFetch].coordinates.lat}&fromLng=${this.state.offers[this.state.currentRouteToFetch].coordinates.lng}&toLat=${this.state.selectedPlace.geometry.coordinates[1]}&toLng=${this.state.selectedPlace.geometry.coordinates[0]}&depTime=2020-05-23T10:15:30`;
+    axios.get(apiUrl,{timeout:config.MAP_API_TIMEOUT})
     .then(res=> {
       let offersCopy = this.state.offers;
       let stOffer = offersCopy[this.state.currentRouteToFetch];
@@ -291,6 +286,10 @@ handleModalClose = ()=>{
   this.setState({openTooFarAwayModal:false})
 }
 
+handleModalOpen = ()=>{
+  this.setState({openTooFarAwayModal:true})
+}
+
   render(){
 
     let placeTooFarAwayModal = <Modal show={this.state.openTooFarAwayModal} onHide={this.handleModalClose}>
@@ -312,7 +311,7 @@ handleModalClose = ()=>{
     let header = this.state.currentView === 'list'? <Header/> : null;
     let offers = <Offers onRecalculateRoutesHandler={this.onRecalculateRoutesHandler} routingRequestState={this.state.routingRequestState} onRetryButtonClicked={this.onRetryButtonClicked} offersRequestState={this.state.offersRequestState} numberOfOffers={this.state.numberOfOffers} currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
     let settings = this.state.currentView === 'list'? <Settings onSettingsChanged={this.onSettingsChanged}/> : null;
-    let search = this.state.currentView === 'list'? <Search currentSearchRegion={this.state.currentSearchRegion} selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
+    let search = this.state.currentView === 'list'? <Search  handleModalOpen={this.handleModalOpen} currentSearchRegion={this.state.currentSearchRegion} selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
 
   return (
     <Router>

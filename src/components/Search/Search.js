@@ -7,6 +7,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import classes from './Search.module.css';
 import RouteControls from './../RouteControls/RouteControls.js';
 import {isWithinBoundingBox} from './../../util/LatLngUtil';
+import config from './../../config';
+
 
 const buildAddresFromPlaceProperties = (properties) => {
   let newAddress = '';
@@ -36,10 +38,6 @@ const buildAddresFromPlaceProperties = (properties) => {
     newAddress = newAddress + ', ' + properties.housenumber;
   }
 
-  // if(properties.name){
-  //   newAddress = newAddress + ', ' + properties.name;
-  // }
-
  }
   return newAddress
 }
@@ -57,8 +55,8 @@ const buildInputTextFromSelectedPlace= (selectedPlace)=>{
 
 
 export default function Search(props) {
+
 let autoCompleteErrorMessage = 'Błąd. Spróbuj ponownie później';
-let autoCompleteApiTimeout = 15000;
 const CancelToken = axios.CancelToken;
 let cancel;
 
@@ -68,14 +66,9 @@ let cancel;
   const [loading, setLoading] = React.useState(false);
   const [inputValue, setInputValue] = React.useState(buildInputTextFromSelectedPlace(props.selectedPlace));
   
-
-
-
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
-
-  
 
   const fetch = React.useMemo(
     () =>
@@ -84,12 +77,12 @@ let cancel;
         if (cancel !== undefined) {
             cancel();
         }
-        axios.get(`https://photon.komoot.de/api/?q=${param.value}&lon=17&lat=51&limit=10`,{
+        axios.get(config.MAP_API_PREFIX + `/api/place/autocomplete?query=${param.value}`,{
             cancelToken: new CancelToken(function executor(c) {
               cancel = c;
             }
             ),
-            timeout:autoCompleteApiTimeout
+            timeout:config.MAP_API_TIMEOUT
           })
         .then(resp => {
             setLoading(false);
@@ -161,10 +154,11 @@ let cancel;
           if(reason==='select-option'){
             if(isWithinBoundingBox(props.currentSearchRegion.boundingBox,value.geometry.coordinates)){
               props.clicked(value);
+              setInputValue(buildAddresFromPlaceProperties(value.properties))
             }else{
               setInputValue(buildAddresFromPlaceProperties(props.selectedPlace.properties))
-              alert('za daleko ziomus');
-              }
+              props.handleModalOpen();
+            }
           }
           if(reason==='clear'){
             setInputValue('');
