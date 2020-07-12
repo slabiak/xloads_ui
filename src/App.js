@@ -7,12 +7,14 @@ import axios from 'axios';
 import classes from './App.module.css';
 import Header from './components/Header/Header';
 import Settings from './components/Settings/Settings';
+import { Modal, Button} from 'react-bootstrap';
 import {Pagination} from '@material-ui/lab';
 import { BrowserRouter as Router } from "react-router-dom";
-
+import {calculateBoundingBox, isWithinBoundingBox} from './util/LatLngUtil';
 
 class  App extends Component {
 
+  boundingBox = []
   offersApiTimeout = 3000;
   routingApiTimeout = 3000;
   backendPrefix = 'http://13.70.192.93:8087/';
@@ -20,7 +22,8 @@ class  App extends Component {
 // backendPrefix = 'http://localhost:8087/'
 
 state = {
-    selectedPlace: {geometry: {coordinates: [17.0312014,51.1104557]}, address: '50-107 Wroclaw, Rynek'},
+    currentSearchRegion : {name:'Wrocław', boundingBox: calculateBoundingBox([17.0323709,51.1106956],15)},
+    selectedPlace: {geometry: {coordinates: [17.0323709,51.1106956]}, properties:{housenumber: "", city: "Wroclaw", street: "Rynek", postcode: "50-116"}},
     offers: [],
     currentRouteToFetch: -1,
     hooveredOffer:{
@@ -43,7 +46,8 @@ state = {
         routingRequestState: {
           loading: true,
           responseCode: 0
-            }
+            },
+            openTooFarAwayModal :false
 }
 
 onRecalculateRoutesHandler = (e)=>{
@@ -156,62 +160,56 @@ onChangeViewHandler = (e,newView) => {
 
 
 onTargetMarketDragEndHanlder = (e)=>{
-  let newSelectedPlace = {
-    address: 'dupa adres',
-    geometry: {coordinates: [e.target._latlng.lng,e.target._latlng.lat]},
-    autocomplete: false
-  }
-  let clearOffers = this.state.offers.map(offer=>
+    if(isWithinBoundingBox(this.state.currentSearchRegion.boundingBox,[e.target._latlng.lng,e.target._latlng.lat])){
+  let offersWithClearedRoutes = this.state.offers.map(offer=>
     {
     var temp = Object.assign({}, offer);
     temp.calculationRequired=true;
     temp.paths = null;
     return temp;
     });
-  //this.setState({selectedPlace: newSelectedPlace,currentRouteToFetch:0, offers: clearOffers})
+
+  let newSelectedPlace = {
+    properties: undefined,
+    geometry: {coordinates: [e.target._latlng.lng,e.target._latlng.lat]},
+    autocomplete: false
+  }
+  this.setState({selectedPlace: newSelectedPlace,currentRouteToFetch:0, offers: offersWithClearedRoutes})
   
   axios.get(`http://photon.komoot.de/reverse?lon=${e.target._latlng.lng}&lat=${e.target._latlng.lat}`)
   .then(res=> {
-    let newAddress = '';
-    if(res.data.features[0].properties.postcode){
-      newAddress = res.data.features[0].properties.postcode;
-    } 
-    if(res.data.features[0].properties.city){
-      newAddress = newAddress + ' ' + res.data.features[0].properties.city;
-    }
-    if(res.data.features[0].properties.street){
-      newAddress = newAddress + ', ' + res.data.features[0].properties.street
-    } 
-    if(res.data.features[0].properties.housenumber){
-      newAddress = newAddress + ', ' + res.data.features[0].properties.housenumber
-    }
 
     let newSelectedPlace = {
-      address:  newAddress,
-      geometry: {coordinates: [e.target._latlng.lng,e.target._latlng.lat]},
+      ...res.data.features[0],
       autocomplete: false
     }
-    let clearOffers = this.state.offers.map(offer=>
-      {
-      var temp = Object.assign({}, offer);
-      temp.calculationRequired=true;
-      temp.paths = null;
-      return temp;
-      });
-    this.setState({selectedPlace: newSelectedPlace,currentRouteToFetch:0, offers: clearOffers});
-  })
+    this.setState({selectedPlace: newSelectedPlace});
 
+  }).catch(e=>{
+    this.setState({selectedPlace: {...this.state.selectedPlace, error: true}});
+  })
+    } else {
+      this.setState({openTooFarAwayModal:true});
+    }
 }
 
 selectedPlaceHandler = (feature) => {
-  let clearOffers = this.state.offers.map(offer=>
+  
+  let newSelectedPlace = {...feature, autocomplete: true};
+  if(!feature.error){
+
+  let offersWithClearedRoutes = this.state.offers.map(offer=>
     {
       var temp = Object.assign({}, offer);
       temp.calculationRequired=true;
     temp.paths = null;
     return temp;
     });
-  this.setState({selectedPlace:{...feature, autocomplete: true}, currentRouteToFetch:0, offers: clearOffers})
+  this.setState({selectedPlace: newSelectedPlace, currentRouteToFetch:0, offers: offersWithClearedRoutes})
+  }else{
+    this.setState({selectedPlace: newSelectedPlace});
+
+  }
 }
 
 onMouseOverOfferHandler = (id)=>{
@@ -289,19 +287,37 @@ componentDidUpdate(prevProps, prevState) {
   }
 }
 
-
+handleModalClose = ()=>{
+  this.setState({openTooFarAwayModal:false})
+}
 
   render(){
 
-  
+    let placeTooFarAwayModal = <Modal show={this.state.openTooFarAwayModal} onHide={this.handleModalClose}>
+    <Modal.Header>
+    <Modal.Title>Błąd!</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+  <p> Wybrane miejsce znajduje się poza granicami {this.state.currentSearchRegion.name}</p>
+  <p> Proszę, wybierz coś bliżej!</p>
+</Modal.Body>
+<Modal.Footer>
+  <Button variant="secondary" onClick={this.handleModalClose}>
+    Zamknij
+  </Button>
+</Modal.Footer>
+
+    </Modal>
+
     let header = this.state.currentView === 'list'? <Header/> : null;
     let offers = <Offers onRecalculateRoutesHandler={this.onRecalculateRoutesHandler} routingRequestState={this.state.routingRequestState} onRetryButtonClicked={this.onRetryButtonClicked} offersRequestState={this.state.offersRequestState} numberOfOffers={this.state.numberOfOffers} currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
     let settings = this.state.currentView === 'list'? <Settings onSettingsChanged={this.onSettingsChanged}/> : null;
-    let search = this.state.currentView === 'list'? <Search inputValue={this.state.selectedPlace.address} selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
+    let search = this.state.currentView === 'list'? <Search currentSearchRegion={this.state.currentSearchRegion} selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
 
   return (
     <Router>
 <div className={this.state.currentView==='list' ? classes.Container : classes.ContainerMap}> 
+{placeTooFarAwayModal}
 {header}
 {search}
 {settings}
