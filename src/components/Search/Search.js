@@ -12,7 +12,7 @@ import RouteControls from './../RouteControls/RouteControls.js';
 export default function Search(props) {
 const CancelToken = axios.CancelToken;
 let cancel;
-  const [inputValue, setInputValue] = React.useState('50-107 Wroclaw, Rynek');
+  const [inputValue, setInputValue] = React.useState(props.inputValue);
   const [options, setOptions] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -48,7 +48,6 @@ let cancel;
   );
 
   React.useEffect(() => {
-
     if (inputValue.length > 0) {
         fetch({value: inputValue});
     } else {
@@ -65,7 +64,6 @@ let cancel;
   }, [open]);
 
   React.useEffect(()=>{
-   // console.log('zmiana ehehhe')
     if(props.selectedPlace.autocomplete === false){
     setInputValue(props.selectedPlace.address);
     }

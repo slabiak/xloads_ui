@@ -40,6 +40,12 @@
     margin: 0px;
 }
 
+.Icon,
+.IconText {
+  vertical-align: middle;
+  display: inline-block;
+}
+
 
 @media screen and (min-width: 750px) {
     .Offer{

@@ -13,7 +13,7 @@ function Offers(props) {
     let offersHeader =null;
     if(props.currentView ==='list') {
         offers = props.data.map(offer => 
-       <Offer mode={props.mode} key={offer.id} onMouseLeaveHandler={props.onMouseLeaveHandler} onMouseOverOfferHandler={props.onMouseOverOfferHandler} data={offer}></Offer>
+       <Offer onRecalculateRoutesHandler={props.onRecalculateRoutesHandler} routingRequestState={props.routingRequestState} mode={props.mode} key={offer.id} onMouseLeaveHandler={props.onMouseLeaveHandler} onMouseOverOfferHandler={props.onMouseOverOfferHandler} data={offer}></Offer>
     )
         }
 
