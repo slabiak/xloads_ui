@@ -3,6 +3,7 @@ import React from 'react'
 import classes from './Header.module.css';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
+
 function RouteControls (props) {
 
     const [city, setCity] = React.useState('');
@@ -14,6 +15,11 @@ function RouteControls (props) {
 
        return (
         <div className={classes.Header}>
+               <div>
+                     <p><strong>NearProps.com</strong></p>
+
+               </div>
+
             <div>
 
             <a href="">Dodaj ogłoszenie</a>
