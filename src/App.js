@@ -9,9 +9,10 @@ import Header from './components/Header/Header';
 import Settings from './components/Settings/Settings';
 import { Modal, Button} from 'react-bootstrap';
 import {Pagination} from '@material-ui/lab';
-import { BrowserRouter as Router } from "react-router-dom";
+import {Switch, Route, Link} from "react-router-dom";
 import {calculateBoundingBox, isWithinBoundingBox} from './util/LatLngUtil';
 import config from './config';
+import OfferDetails from './components/Offers/OfferDetails/OfferDetails';
 
 class  App extends Component {
 
@@ -312,30 +313,49 @@ handleModalOpen = ()=>{
     let offers = <Offers onRecalculateRoutesHandler={this.onRecalculateRoutesHandler} routingRequestState={this.state.routingRequestState} onRetryButtonClicked={this.onRetryButtonClicked} offersRequestState={this.state.offersRequestState} numberOfOffers={this.state.numberOfOffers} currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
     let settings = this.state.currentView === 'list'? <Settings onSettingsChanged={this.onSettingsChanged}/> : null;
     let search = this.state.currentView === 'list'? <Search  handleModalOpen={this.handleModalOpen} currentSearchRegion={this.state.currentSearchRegion} selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
+    let map = <MapComp routeType={this.state.routeType} onTargetMarketDragEndHanlder={this.onTargetMarketDragEndHanlder} selectedPlace={this.state.selectedPlace} offers={this.state.offers} hooveredOffer={this.state.hooveredOffer}>
+    </MapComp>
+    let pagination = (<div className={classes.Pagination}>
 
-  return (
-    <Router>
-<div className={this.state.currentView==='list' ? classes.Container : classes.ContainerMap}> 
-{placeTooFarAwayModal}
-{header}
+    <div className={classes.pagination}>
+    
+          <Pagination color="primary" count={this.state.totalPages} page={this.state.currentPage} onChange={this.onChangePageHandler} />
+    
+    </div>
+    
+    </div>);
+
+
+let homePage = (
+<React.Fragment>
 {search}
 {settings}
 {offers}
-<MapComp routeType={this.state.routeType} onTargetMarketDragEndHanlder={this.onTargetMarketDragEndHanlder} selectedPlace={this.state.selectedPlace} offers={this.state.offers} hooveredOffer={this.state.hooveredOffer}>
-</MapComp>
+{map}
+{pagination}
+{placeTooFarAwayModal}
+</React.Fragment>
+);
 
-<div className={classes.Pagination}>
+  return (
 
-<div className={classes.pagination}>
+<div className={this.state.currentView==='list' ? classes.Container : classes.ContainerMap}> 
 
-      <Pagination color="primary" count={this.state.totalPages} page={this.state.currentPage} onChange={this.onChangePageHandler} />
+{header}
+<Switch>
 
+          <Route path="/contact">
+            <p>contact hehe</p>
+          </Route>
+          <Route exact path="/">
+          {homePage}
+          </Route>
+          <Route path="/offers/:id" component={OfferDetails}>
+          
+
+          </Route>
+</Switch>
 </div>
-
-</div>
-
-</div>
-</Router>
   );
   }
 }

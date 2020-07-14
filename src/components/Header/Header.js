@@ -3,6 +3,8 @@ import React from 'react'
 import classes from './Header.module.css';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
+import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
+
 
 function RouteControls (props) {
 
@@ -23,7 +25,7 @@ function RouteControls (props) {
             <div>
 
            
-     <a href="mailto:contact@nearprops.com">Kontakt</a>
+            <Link to="/contact">Kontakt</Link>
             </div>
 
 

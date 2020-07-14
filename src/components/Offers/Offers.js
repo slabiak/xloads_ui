@@ -5,6 +5,8 @@ import {Pagination} from 'react-bootstrap';
 import OffersHeader from './OffersHeader/OffersHeader';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Button} from '@material-ui/core';
+import {Switch, Route, Link} from "react-router-dom";
+
 
 function Offers(props) {
 
@@ -13,7 +15,7 @@ function Offers(props) {
     let offersHeader =null;
     if(props.currentView ==='list') {
         offers = props.data.map(offer => 
-       <Offer onRecalculateRoutesHandler={props.onRecalculateRoutesHandler} routingRequestState={props.routingRequestState} mode={props.mode} key={offer.id} onMouseLeaveHandler={props.onMouseLeaveHandler} onMouseOverOfferHandler={props.onMouseOverOfferHandler} data={offer}></Offer>
+      <Link to={"/offers/"+ offer.id}><Offer onRecalculateRoutesHandler={props.onRecalculateRoutesHandler} routingRequestState={props.routingRequestState} mode={props.mode} key={offer.id} onMouseLeaveHandler={props.onMouseLeaveHandler} onMouseOverOfferHandler={props.onMouseOverOfferHandler} data={offer}></Offer></Link> 
     )
         }
 
