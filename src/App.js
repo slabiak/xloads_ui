@@ -13,6 +13,7 @@ import {Switch, Route, Link} from "react-router-dom";
 import {calculateBoundingBox, isWithinBoundingBox} from './util/LatLngUtil';
 import config from './config';
 import OfferDetails from './components/Offers/OfferDetails/OfferDetails';
+import {connect} from 'react-redux';
 
 class  App extends Component {
 
@@ -223,6 +224,7 @@ onMouseLeaveHandler = ()=>{
 }
 
 onRouteTypeChange = (newRouteType)=>{
+  this.props.onChangeRouteType(newRouteType);
   let clearOffers = this.state.offers.map(offer=>
     {
     var temp = Object.assign({}, offer);
@@ -344,11 +346,9 @@ let homePage = (
 {header}
 <Switch>
 
+          <Route exact path="/">   {homePage}</Route>
           <Route path="/contact">
             <p>contact hehe</p>
-          </Route>
-          <Route exact path="/">
-          {homePage}
           </Route>
           <Route path="/offers/:id" component={OfferDetails}>
           
@@ -360,4 +360,16 @@ let homePage = (
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    routeType: state.routeType
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onChangeRouteType: (newRouteType)=> dispatch({type:'CHANGE_ROUTE_TYPE', routeType:newRouteType})
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);
