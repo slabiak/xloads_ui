@@ -14,6 +14,7 @@ import {calculateBoundingBox, isWithinBoundingBox} from './util/LatLngUtil';
 import config from './config';
 import OfferDetails from './components/Offers/OfferDetails/OfferDetails';
 import {connect} from 'react-redux';
+import * as actionTypes from './store/actions/index';
 
 class  App extends Component {
 
@@ -21,25 +22,26 @@ class  App extends Component {
 state = {
     currentSearchRegion : {name:'Wrocław', boundingBox: calculateBoundingBox([17.0323709,51.1106956],15)},
     selectedPlace: {geometry: {coordinates: [17.0323709,51.1106956]}, properties:{housenumber: "", city: "Wroclaw", street: "Rynek", postcode: "50-116"}},
-    offers: [],
-    currentRouteToFetch: -1,
+    // offers: [],
+    // currentRouteToFetch: -1,
     hooveredOffer:{
       state: false,
       offerId: undefined
     },
-    routeType: 'foot',
+    // routeType: 'foot',
     currentView: 'list',
-    totalPages: 0,
-    currentPage: 1,
-    numberOfOffers: 0,
-    category: '1',
-    sortBy: 'created.desc',
-    priceFrom: 0,
-    priceTo: 10000,
-    offersRequestState: {
-      loading: true,
-      responseCode: 0
-        },
+    // totalPages: 0,
+    // currentPage: 1,
+    // numberOfOffers: 0,
+    // category: '1',
+    // sortBy: 'created.desc',
+    // priceFrom: 0,
+    // priceTo: 10000,
+    // offersRequestState: {
+    //   loading: true,
+    //   responseCode: 0
+    //     },
+
         routingRequestState: {
           loading: true,
           responseCode: 0
@@ -56,77 +58,87 @@ onRecalculateRoutesHandler = (e)=>{
 }
 
 onRetryButtonClicked = ()=> {
-  this.setState({offersRequestState:{loading: true, responseCode: 0}, offers: []});
+  // this.setState({offersRequestState:{loading: true, responseCode: 0}, offers: []});
 
-  let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=${this.state.currentPage-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
-  axios.get(apiUrl, {timeout: config.OFFERS_API_TIMEOUT})
-  .then(res=> {
-    let fetchedOffers = res.data.content.map(offer => {
-        let o = {
+  // let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=${this.state.currentPage-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
+  // axios.get(apiUrl, {timeout: config.OFFERS_API_TIMEOUT})
+  // .then(res=> {
+  //   let fetchedOffers = res.data.content.map(offer => {
+  //       let o = {
       
-          ...offer,
-          calculationRequired:true
+  //         ...offer,
+  //         calculationRequired:true
   
-        }
-        return o;
-    }) 
-    this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
-      offersRequestState: {loading: false,responseCode: res.status}});
-  }).catch(e=>{
-    if (e.response) {
-      this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
-    } else if (e.request) {
-      this.setState({offersRequestState: {loading: false,responseCode: 1001}});
-  }});
+  //       }
+  //       return o;
+  //   }) 
+  //   this.setState({offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
+  //     offersRequestState: {loading: false,responseCode: res.status}});
+  // }).catch(e=>{
+  //   if (e.response) {
+  //     this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
+  //   } else if (e.request) {
+  //     this.setState({offersRequestState: {loading: false,responseCode: 1001}});
+  // }});
+
+  let requestParams = {
+    category:this.props.category,
+    priceGte:this.props.priceFrom,
+    priceLte:this.props.priceTo,
+    sortBy : this.props.sortBy,
+    pageNumber: this.state.currentPage-1,
+    limit: 5
+  }
+  this.props.makeOffersPageRequest(requestParams);
 }
 
-onSettingsChanged = (newSettings)=>{
-  let newPriceFrom = newSettings.priceFrom != '' ? newSettings.priceFrom : 0;
-  let newPriceTo = newSettings.priceTo != '' ? newSettings.priceTo : 10000;
+// onSettingsChanged = (newSettings)=>{
+//   let newPriceFrom = newSettings.priceFrom != '' ? newSettings.priceFrom : 0;
+//   let newPriceTo = newSettings.priceTo != '' ? newSettings.priceTo : 10000;
 
-  this.setState({offersRequestState:{loading: true, responseCode: 0}, offers: [],category: newSettings.category,
-    sortBy: newSettings.sortBy,
-    priceFrom: newPriceFrom,
-    priceTo: newPriceTo,});
+//   this.setState({offersRequestState:{loading: true, responseCode: 0}, offers: [],category: newSettings.category,
+//     sortBy: newSettings.sortBy,
+//     priceFrom: newPriceFrom,
+//     priceTo: newPriceTo,});
 
 
-  let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${newSettings.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${newSettings.sortBy}`;
-  axios.get(apiUrl, {timeout: config.OFFERS_API_TIMEOUT})
-  .then(res=> {
-    let fetchedOffers = res.data.content.map(offer => {
-        let o = {
+//   let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${newSettings.category}/page?limit=5&page=0&price_gte=${newPriceFrom}&price_lte=${newPriceTo}&sort_by=${newSettings.sortBy}`;
+//   axios.get(apiUrl, {timeout: config.OFFERS_API_TIMEOUT})
+//   .then(res=> {
+//     let fetchedOffers = res.data.content.map(offer => {
+//         let o = {
       
-          ...offer,
-          calculationRequired:true
+//           ...offer,
+//           calculationRequired:true
   
-        }
-        return o;
-    }) 
+//         }
+//         return o;
+//     }) 
    
 
-    this.setState({offers : fetchedOffers, currentRouteToFetch:fetchedOffers.length >0? 0:-1,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
-      offersRequestState: {loading: false,responseCode: res.status},routingRequestState: {
-        loading: fetchedOffers.length>0? true:false,
-        responseCode: 0
-          }});
-  }).catch(e=>{
-    if (e.response) {
-      this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
-    } else if (e.request) {
-      this.setState({offersRequestState: {loading: false,responseCode: 1001}});
-  }});
+//     this.setState({offers : fetchedOffers, currentRouteToFetch:fetchedOffers.length >0? 0:-1,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements,
+//       offersRequestState: {loading: false,responseCode: res.status},routingRequestState: {
+//         loading: fetchedOffers.length>0? true:false,
+//         responseCode: 0
+//           }});
+//   }).catch(e=>{
+//     if (e.response) {
+//       this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
+//     } else if (e.request) {
+//       this.setState({offersRequestState: {loading: false,responseCode: 1001}});
+//   }});
 
-}
+// }
 
 
 onChangePageHandler = (event, value) => {
-  this.setState({offersRequestState: {loading: true,responseCode: 0}, offers:[], currentPage:value,  routingRequestState: {
-    loading: true,
-    responseCode: 0
-      }});
+  // this.setState({offersRequestState: {loading: true,responseCode: 0}, offers:[], currentPage:value,  routingRequestState: {
+  //   loading: true,
+  //   responseCode: 0
+  //     }});
 
 
-  let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
+  /* let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=${value-1}&price_gte=${this.state.priceFrom}&price_lte=${this.state.priceTo}&sort_by=${this.state.sortBy}`;
   axios.get(apiUrl,{timeout: config.OFFERS_API_TIMEOUT})
   .then(res=> {
     let fetchedOffers = res.data.content.map(offer => {
@@ -146,7 +158,16 @@ onChangePageHandler = (event, value) => {
       this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
     } else if (e.request) {
       this.setState({offersRequestState: {loading: false,responseCode: 1001}});
-  }});
+  }}); */
+  let requestParams = {
+    category:this.props.category,
+    priceGte:this.props.priceFrom,
+    priceLte:this.props.priceTo,
+    sortBy : this.props.sortBy,
+    pageNumber: value-1,
+    limit: 5
+  }
+  this.props.makeOffersPageRequest(requestParams);
   
 };
 
@@ -224,7 +245,6 @@ onMouseLeaveHandler = ()=>{
 }
 
 onRouteTypeChange = (newRouteType)=>{
-  this.props.onChangeRouteType(newRouteType);
   let clearOffers = this.state.offers.map(offer=>
     {
     var temp = Object.assign({}, offer);
@@ -239,27 +259,37 @@ onRouteTypeChange = (newRouteType)=>{
 }
 
 componentDidMount(){
-  let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=0&price_gte=${0}&price_lte=${10000}&sort_by=${this.state.sortBy}`;
-  axios.get(apiUrl,{timeout: config.OFFERS_API_TIMEOUT})
-  .then(res=> {
-    let fetchedOffers = res.data.content.map(offer => {
-        let o = {
-          ...offer,
-          calculationRequired:true
-        }
-        return o;
-    }) 
-    this.setState({offersRequestState: {loading: false,responseCode: res.status},offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements});
-  }).catch(e=>{
-    if (e.response) {
-      this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
-    } else if (e.request) {
-      this.setState({offersRequestState: {loading: false,responseCode: 1001}});
-  }});
+  // let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/category/${this.state.category}/page?limit=5&page=0&price_gte=${0}&price_lte=${10000}&sort_by=${this.state.sortBy}`;
+  // axios.get(apiUrl,{timeout: config.OFFERS_API_TIMEOUT})
+  // .then(res=> {
+  //   let fetchedOffers = res.data.content.map(offer => {
+  //       let o = {
+  //         ...offer,
+  //         calculationRequired:true
+  //       }
+  //       return o;
+  //   }) 
+  //   this.setState({offersRequestState: {loading: false,responseCode: res.status},offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements});
+  //   this.props.onSuccessfulOffersPageRequest({offersRequestState: {loading: false,responseCode: res.status},offers : fetchedOffers, currentRouteToFetch:0,totalPages:res.data.totalPages, currentPage: res.data.number + 1, numberOfOffers: res.data.totalElements});
+  // }).catch(e=>{
+  //   if (e.response) {
+  //     this.setState({offersRequestState: {loading: false,responseCode: e.response.status}})
+  //   } else if (e.request) {
+  //     this.setState({offersRequestState: {loading: false,responseCode: 1001}});
+  // }});
+  let requestParams = {
+    category:this.props.category,
+    priceGte:this.props.priceFrom,
+    priceLte:this.props.priceTo,
+    sortBy : this.props.sortBy,
+    limit: 5,
+    pageNumber: this.props.currentPage-1,
+  }
+  this.props.makeOffersPageRequest(requestParams);
 }
 
 componentDidUpdate(prevProps, prevState) {
-  if(this.state.offers.length>0 && prevState.currentRouteToFetch !== this.state.currentRouteToFetch && this.state.currentRouteToFetch>=0) {
+  if(this.props.offers.length>0 && prevState.currentRouteToFetch !== this.props.currentRouteToFetch && this.props.currentRouteToFetch>=0) {
     setTimeout(() => { 
       let apiUrl = `${config.MAP_API_PREFIX}/api/route/${this.state.routeType}?fromLat=${this.state.offers[this.state.currentRouteToFetch].coordinates.lat}&fromLng=${this.state.offers[this.state.currentRouteToFetch].coordinates.lng}&toLat=${this.state.selectedPlace.geometry.coordinates[1]}&toLng=${this.state.selectedPlace.geometry.coordinates[0]}&depTime=2020-05-23T10:15:30`;
     axios.get(apiUrl,{timeout:config.MAP_API_TIMEOUT})
@@ -315,13 +345,13 @@ handleModalOpen = ()=>{
     let offers = <Offers onRecalculateRoutesHandler={this.onRecalculateRoutesHandler} routingRequestState={this.state.routingRequestState} onRetryButtonClicked={this.onRetryButtonClicked} offersRequestState={this.state.offersRequestState} numberOfOffers={this.state.numberOfOffers} currentView={this.state.currentView} onChangeViewHandler={this.onChangeViewHandler} mode={this.state.routeType} onMouseLeaveHandler={this.onMouseLeaveHandler} onMouseOverOfferHandler={this.onMouseOverOfferHandler} data={this.state.offers}></Offers>;
     let settings = this.state.currentView === 'list'? <Settings onSettingsChanged={this.onSettingsChanged}/> : null;
     let search = this.state.currentView === 'list'? <Search  handleModalOpen={this.handleModalOpen} currentSearchRegion={this.state.currentSearchRegion} selectedPlace={this.state.selectedPlace} onRouteTypeChange={this.onRouteTypeChange} routeType={this.state.routeType} clicked={this.selectedPlaceHandler}></Search> : null;
-    let map = <MapComp routeType={this.state.routeType} onTargetMarketDragEndHanlder={this.onTargetMarketDragEndHanlder} selectedPlace={this.state.selectedPlace} offers={this.state.offers} hooveredOffer={this.state.hooveredOffer}>
+    let map = <MapComp routeType={this.props.routeType} onTargetMarketDragEndHanlder={this.onTargetMarketDragEndHanlder} selectedPlace={this.state.selectedPlace} offers={this.props.offers} hooveredOffer={this.state.hooveredOffer}>
     </MapComp>
     let pagination = (<div className={classes.Pagination}>
 
     <div className={classes.pagination}>
     
-          <Pagination color="primary" count={this.state.totalPages} page={this.state.currentPage} onChange={this.onChangePageHandler} />
+          <Pagination color="primary" count={this.props.totalPages} page={this.props.currentPage} onChange={this.onChangePageHandler} />
     
     </div>
     
@@ -360,15 +390,25 @@ let homePage = (
   }
 }
 
+
+
 const mapStateToProps = state => {
   return {
-    routeType: state.routeType
+    routeType: state.routeControls.currentRouteType,
+    offers : state.offers.offers,
+    currentPage : state.offers.currentPage,
+    totalPages : state.offers.totalPages,
+    category : state.settings.category,
+    sortBy : state.settings.sortBy,
+    priceFrom: state.settings.priceFrom,
+    priceTo: state.settings.priceTo
   };
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onChangeRouteType: (newRouteType)=> dispatch({type:'CHANGE_ROUTE_TYPE', routeType:newRouteType})
+    // onSuccessfulOffersPageRequest: (data)=> dispatch(actionTypes.onSuccessfulOffersPageRequest(data))
+    makeOffersPageRequest : (requestParams) => dispatch(actionTypes.makeOffersPageRequest(requestParams))
   };
 }
 

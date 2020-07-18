@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef} from 'react'
 import classes from './Settings.module.css';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
+import {connect} from 'react-redux';
+import * as actionTypes from '../../store/actions/index';
 
 function RouteControls (props) {
    const isFirstRun = useRef(true);
@@ -44,7 +46,18 @@ function RouteControls (props) {
          isFirstRun.current = false;
          return;
        }
-      props.onSettingsChanged({category:category,sortBy:sortBy,priceFrom:priceFrom,priceTo:priceTo});
+      //props.onSettingsChanged({category:category,sortBy:sortBy,priceFrom:priceFrom,priceTo:priceTo});
+      props.updateSettings({category:category,sortBy:sortBy,priceFrom:priceFrom,priceTo:priceTo});
+      let requestParams = {
+        category:category,
+        priceGte:priceFrom,
+        priceLte:priceTo,
+        sortBy : sortBy,
+        pageNumber: props.currentPage-1,
+        limit: 5
+      }
+      props.makeOffersPageRequest(requestParams);
+
     }, [flag]);
 
        return (
@@ -96,4 +109,18 @@ function RouteControls (props) {
        )
 }
 
-export default RouteControls;
+const mapStateToProps = state => {
+  return {
+    currentPage: state.offers.currentPage
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateSettings: (newSettings)=> dispatch(actionTypes.updateSettings(newSettings)),
+    makeOffersPageRequest : (requestParams) => dispatch(actionTypes.makeOffersPageRequest(requestParams))
+  };
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(RouteControls);

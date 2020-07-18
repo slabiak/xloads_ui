@@ -5,17 +5,38 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter} from "react-router-dom";
-import {createStore} from 'redux';
-import reducer from './store/reducer';
+import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
+import routeControlsReducer from './store/reducers/routeControls';
+import offersReducer from './store/reducers/offers';
+import settingsReducer from './store/reducers/settings';
+
 import {Provider} from 'react-redux'
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+import thunk from 'redux-thunk';
+
+
+const rootReducer = combineReducers(
+  {
+    routeControls: routeControlsReducer,
+    offers: offersReducer,
+    settings : settingsReducer
+
+  }
+)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+
+
+//const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
+
+
 
 ReactDOM.render(
-  <BrowserRouter>
   <Provider store={store}>
+  <BrowserRouter>
     <App />
-  </Provider>
   </BrowserRouter>
+  </Provider>
   ,
   document.getElementById('root')
 );
