@@ -9,6 +9,7 @@ import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 import routeControlsReducer from './store/reducers/routeControls';
 import offersReducer from './store/reducers/offers';
 import settingsReducer from './store/reducers/settings';
+import searchReducer from './store/reducers/search';
 
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk';
@@ -18,7 +19,8 @@ const rootReducer = combineReducers(
   {
     routeControls: routeControlsReducer,
     offers: offersReducer,
-    settings : settingsReducer
+    settings : settingsReducer,
+    search: searchReducer
 
   }
 )

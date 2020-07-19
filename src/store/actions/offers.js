@@ -2,6 +2,73 @@ import * as actionTypes from './actionTypes';
 import config from '../../config';
 import axios from 'axios';
 
+export const setCurrentRouteToFetch = (newRouteToFetch) => {
+    return {
+        type: actionTypes.SET_CURRENT_ROUTE_TO_FETCH,
+        newCurrentRouteToFetch: newRouteToFetch
+    }
+}
+
+export const setHooveredOffer = (hooveredOffer) => {
+    return {
+        type: actionTypes.SET_HOOVERED_OFFER,
+        hooveredOffer: hooveredOffer
+    }
+}
+
+
+export const onSuccessfulRouteRequest = (fetchedPaths) => {
+    return {
+    type: actionTypes.ON_SUCCESSFUL_ROUTE_REQUEST,
+    fetchedPaths: fetchedPaths
+    }
+};
+
+export const onFailedRouteRequest = (responseCode) => {
+    return {
+        type: actionTypes.ON_FAILED_ROUTE_REQUEST,
+        responseCode: responseCode
+    }
+}
+
+export const setRoute = (data) => {
+    return {
+        type: actionTypes.SET_ROUTE,
+        data: data
+    }
+}
+
+export const setRoutesLoading = (loading) => {
+    return {
+        type: actionTypes.SET_ROUTES_LOADING,
+        loading: loading
+    }
+}
+
+export const makeRouteRequest = (requestParams) => {
+    return dispatch => {
+  dispatch(setRoutesLoading(true));
+  let apiUrl = `${config.MAP_API_PREFIX}/api/route/${requestParams.routeType}?fromLat=${requestParams.fromLat}&fromLng=${requestParams.fromLng}&toLat=${requestParams.toLat}&toLng=${requestParams.toLng}&depTime=2020-05-23T10:15:30`;
+  axios.get(apiUrl,{timeout:config.MAP_API_TIMEOUT})
+  .then(res=> {
+    dispatch(onSuccessfulRouteRequest({fetchedPaths: res.data,responseCode:res.status}));
+   })
+   .catch(e=>{
+    if (e.response) {
+      dispatch(onFailedRouteRequest(e.response.status));
+    } else if (e.request) {
+      dispatch(onFailedRouteRequest(1001));
+  }});
+  
+    }
+}
+
+
+export const clearOffersRoutes = () => {
+    return {
+        type: actionTypes.CLEAR_OFFERS_ROUTES
+    }
+}
 
 export const onSuccessfulOffersPageRequest = (data) => {
     return {

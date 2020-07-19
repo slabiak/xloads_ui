@@ -10,9 +10,6 @@ import 'moment/locale/pl'
 
 function Offer(props) {
 
-    
-
-
     moment.locale('pl');
     let mode = null;
     if(props.mode==='transit'){
@@ -56,10 +53,9 @@ function Offer(props) {
 
         routeInfo = 
         <React.Fragment>
-            <span className={classes.Icon}>{timeIcon}</span>
-            <span className={classes.IconText}> {Math.round((props.data.paths[0].totalTime/ 60 * 100) / 100)} min {mode}<br/>
+           {timeIcon} {Math.round((props.data.paths[0].totalTime/ 60 * 100) / 100)} min {mode}<br/>
         {/* dystans:  {Math.round((props.data.paths[0].totalDistance/1000) * 100) / 100 } km */}
-        {transitInfo}</span>
+       {transitInfo}
         
         </React.Fragment>
     } else {
@@ -102,7 +98,9 @@ function Offer(props) {
         </div>
         <div className={classes.OfferDescription}>
             <p className={classes.OfferPrice}>{props.data.price} zł</p>
-            {spinner} {routeInfo}
+        </div>
+        <div className={classes.RouteInfo}>
+        {spinner} {routeInfo}
         </div>
     
     </div>

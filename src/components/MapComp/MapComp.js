@@ -4,6 +4,12 @@ import OfferModal from '../Offers/OfferModal/OfferModal';
 import iconTarget from '../../UI/marker/iconTarget';
 import Zoomcontrol from 'react-leaflet';
 import classes from './MapComp.module.css';
+import {connect} from 'react-redux';
+import * as actionTypes from '../../store/actions/index';
+import {calculateBoundingBox, isWithinBoundingBox} from '../../util/LatLngUtil';
+import axios from 'axios';
+import config from '../../config';
+
 
 class MapComp extends Component {
   state = {
@@ -50,8 +56,42 @@ class MapComp extends Component {
 
   render() {
     
-    let center = [this.props.selectedPlace.geometry.coordinates[1], this.props.selectedPlace.geometry.coordinates[0]]
-    let selectedPlaceMarker = (<Marker draggable={true} ondragend={(e)=>this.props.onTargetMarketDragEndHanlder(e)} icon={iconTarget} position={center}></Marker>)
+    let center = [this.props.targetPlace.geometry.coordinates[1], this.props.targetPlace.geometry.coordinates[0]]
+    let selectedPlaceMarker = (<Marker 
+      draggable={true} 
+      ondragend={(e)=>{
+        if(isWithinBoundingBox(this.props.currentSearchRegion.boundingBox,[e.target._latlng.lng,e.target._latlng.lat])){ 
+        // this.props.onTargetMarketDragEndHanlder(e)
+            // clearOffersRoutes : ()=> dispatch(actionTypes.clearOffersRoutes())
+            let newSelectedPlace = {
+              properties: undefined,
+              geometry: {coordinates: [e.target._latlng.lng,e.target._latlng.lat]},
+              autocomplete: false
+            }
+            this.props.setTargetPlace(newSelectedPlace);
+            this.props.clearOffersRoutes();
+            axios.get(config.MAP_API_PREFIX + `/api/place/reverse?lng=${e.target._latlng.lng}&lat=${e.target._latlng.lat}`,{timeout:config.MAP_API_TIMEOUT})
+            .then(res=> {
+          
+              let newSelectedPlace = {
+                ...res.data.features[0],
+                autocomplete: false
+              }
+              this.props.setTargetPlace(newSelectedPlace);
+          
+            }).catch(e=>{
+              this.props.setTargetPlace({...this.state.targetPlace, error: true});
+            })
+
+        } else {
+            this.props.openTooFarAwayModal()
+        }
+      
+      }
+      }
+      icon={iconTarget} 
+      position={center}>
+      </Marker>)
     let offersMarkers = this.props.offers.map(offer => <Marker onmouseout={this.onMouseOutOfMarkerHandler} onmouseover={()=>this.onMouseOverMarkerHandler(offer.id)} onclick={()=>this.markerClickedHandler(offer.id)} key={offer.id} position={[offer.coordinates.lat,offer.coordinates.lng]}></Marker>)
     let routes= null
     var offersWithRoute =this.props.offers.filter(offer => !offer.calculationRequired)
@@ -177,4 +217,24 @@ var decodePath = function (encoded, is3D) {
   return array;
 };
 
-export default MapComp
+const mapStateToProps = state => {
+  return {
+    currentSearchRegion: state.search.currentSearchRegion,
+    targetPlace: state.search.targetPlace,
+    offers: state.offers.offers,
+    hooveredOffer: state.offers.hooveredOffer,
+    routeType: state.routeControls.currentRouteType
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // setTargetPlace: (newTargetPlace)=> dispatch(actionTypes.changeR.setTargetPlace(newTargetPlace))
+    openTooFarAwayModal : ()=> dispatch(actionTypes.openTooFarAwayModal()),
+    clearOffersRoutes : ()=> dispatch(actionTypes.clearOffersRoutes()),
+    setTargetPlace: (newTargetPlace)=> dispatch(actionTypes.setTargetPlace(newTargetPlace)),
+
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(MapComp);

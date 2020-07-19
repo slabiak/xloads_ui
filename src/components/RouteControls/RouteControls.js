@@ -10,15 +10,25 @@ import * as actionTypes from '../../store/actions/index';
 
 
  function RouteControls (props) {
+
+    const onChangeRoute = (newRoute) => {
+        props.onChangeRouteType(newRoute);
+        props.clearOffersRoutes();
+ }
+
+
+
         return (
             <div style={{}}>
-            <button onClick={()=>props.onChangeRouteType('foot')} className={props.currentRouteType === 'foot' ? classes.ActiveButton: classes.InactiveButton}><img style={{height:'30px'}} src={footIcon}></img></button>
-            <button onClick={()=>props.onChangeRouteType('bike')} className={props.currentRouteType === 'bike' ? classes.ActiveButton: classes.InactiveButton}><img style={{height:'30px'}} src={bikeIcon}></img></button>
-            <button onClick={()=>props.onChangeRouteType('car')} className={props.currentRouteType === 'car' ? classes.ActiveButton: classes.InactiveButton}><img style={{height:'30px'}} src={carIcon}></img></button>
-            <button onClick={()=>props.onChangeRouteType('transit')} className={props.currentRouteType === 'transit' ? classes.ActiveButton: classes.InactiveButton}><img style={{height:'30px'}} src={tramIcon}></img></button>
+            <button onClick={()=>onChangeRoute('foot')} className={props.currentRouteType === 'foot' ? classes.ActiveButton: classes.InactiveButton}><img style={{height:'30px'}} src={footIcon}></img></button>
+            <button onClick={()=>onChangeRoute('bike')} className={props.currentRouteType === 'bike' ? classes.ActiveButton: classes.InactiveButton}><img style={{height:'30px'}} src={bikeIcon}></img></button>
+            <button onClick={()=>onChangeRoute('car')} className={props.currentRouteType === 'car' ? classes.ActiveButton: classes.InactiveButton}><img style={{height:'30px'}} src={carIcon}></img></button>
+            <button onClick={()=>onChangeRoute('transit')} className={props.currentRouteType === 'transit' ? classes.ActiveButton: classes.InactiveButton}><img style={{height:'30px'}} src={tramIcon}></img></button>
             </div>
         )
  }
+
+
 
  const mapStateToProps = state => {
     return {
@@ -28,7 +38,8 @@ import * as actionTypes from '../../store/actions/index';
   
   const mapDispatchToProps = dispatch => {
     return {
-      onChangeRouteType: (newRouteType)=> dispatch(actionTypes.changeRouteType(newRouteType))
+      onChangeRouteType: (newRouteType)=> dispatch(actionTypes.changeRouteType(newRouteType)),
+      clearOffersRoutes : ()=> dispatch(actionTypes.clearOffersRoutes())
     };
   }
   

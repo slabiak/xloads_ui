@@ -8,15 +8,60 @@ import {Button} from '@material-ui/core';
 import {Switch, Route, Link} from "react-router-dom";
 import {connect} from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
+import config from '../../config';
+import axios from 'axios';
 
 function Offers(props) {
+
+    React.useEffect(() => {
+  if(props.currentRouteToFetch>=0) {
+        let requestParams = {
+        routeType: props.routeType,
+        fromLat: props.data2[props.currentRouteToFetch].coordinates.lat,
+        fromLng: props.data2[props.currentRouteToFetch].coordinates.lng,
+        toLat: props.targetPlace.geometry.coordinates[1],
+        toLng: props.targetPlace.geometry.coordinates[0]
+    }
+    props.makeRouteRequest(requestParams);
+  }}   , [props.currentRouteToFetch]);
+
+    let retryToLoadOffersButtonClicked = ()=> {
+        let requestParams = {
+          category:this.props.category,
+          priceGte:this.props.priceFrom,
+          priceLte:this.props.priceTo,
+          sortBy : this.props.sortBy,
+          pageNumber: this.state.currentPage-1,
+          limit: 5
+        }
+        this.props.makeOffersPageRequest(requestParams);
+      }
+
+    let  onRecalculateRoutesHandler = (e)=>{
+        e.preventDefault();
+        props.setCurrentRouteToFetch(0);
+      }
+
+     let onMouseOverOfferHandler = (id)=>{
+        props.setHooveredOffer({
+          state: true,
+          offerId: id
+        });
+      }
+      
+      let onMouseLeaveHandler = ()=>{
+            props.setHooveredOffer({
+            state: false,
+            offerId: undefined});
+      }
+      
 
     let spinner = null;
     let offers = null;
     let offersHeader =null;
     if(props.currentView ==='list') {
         offers = props.data2.map(offer => 
-      <Link to={"/offers/"+ offer.id}><Offer onRecalculateRoutesHandler={props.onRecalculateRoutesHandler} routingRequestState={props.routingRequestState} mode={props.mode} key={offer.id} onMouseLeaveHandler={props.onMouseLeaveHandler} onMouseOverOfferHandler={props.onMouseOverOfferHandler} data={offer}></Offer></Link> 
+      <Link to={"/offers/"+ offer.id}><Offer  onRecalculateRoutesHandler={onRecalculateRoutesHandler} routingRequestState={props.routingRequestState} mode={props.routeType} key={offer.id} onMouseLeaveHandler={onMouseLeaveHandler} onMouseOverOfferHandler={onMouseOverOfferHandler} data={offer}></Offer></Link> 
     )
         }
 
@@ -32,12 +77,8 @@ function Offers(props) {
                     </div>)
             spinner = null;
         } else {
-            spinner = <div className={classes.SpinnerWrapper}><p>Błąd {props.offersRequestState.responseCode}</p> <Button onClick={()=>props.onRetryButtonClicked()} variant="contained">Spróbuj ponownie</Button>            </div>;
+            spinner = <div className={classes.SpinnerWrapper}><p>Błąd {props.offersRequestState2.responseCode}</p> <Button onClick={()=>retryToLoadOffersButtonClicked()} variant="contained">Spróbuj ponownie</Button>            </div>;
         }
-
-
- 
-
 
     return (
         <div className={classes.Offers}>
@@ -51,13 +92,21 @@ function Offers(props) {
 const mapStateToProps = state => {
     return {
       data2: state.offers.offers,
-      offersRequestState2: state.offers.offersRequestState
+      offersRequestState2: state.offers.offersRequestState,
+      currentRouteToFetch: state.offers.currentRouteToFetch,
+      routingRequestState: state.offers.routingRequestState,
+      targetPlace: state.search.targetPlace,
+      routeType: state.routeControls.currentRouteType,
+      numberOfOffers : state.offers.numberOfOffers
     };
   }
   
   const mapDispatchToProps = dispatch => {
     return {
-    //   onChangeRouteType: (newRouteType)=> dispatch(actionTypes.changeRouteType(newRouteType))
+        makeOffersPageRequest : (requestParams) => dispatch(actionTypes.makeOffersPageRequest(requestParams)),
+        makeRouteRequest: (requestParams) => dispatch(actionTypes.makeRouteRequest(requestParams))       ,
+        setCurrentRouteToFetch: (newRouteToFetch) => dispatch(actionTypes.setCurrentRouteToFetch(newRouteToFetch)),
+        setHooveredOffer : (hooveredOffer) => dispatch(actionTypes.setHooveredOffer(hooveredOffer))
     };
   }
   

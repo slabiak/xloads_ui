@@ -53,7 +53,7 @@ function RouteControls (props) {
         priceGte:priceFrom,
         priceLte:priceTo,
         sortBy : sortBy,
-        pageNumber: props.currentPage-1,
+        pageNumber: 0,
         limit: 5
       }
       props.makeOffersPageRequest(requestParams);

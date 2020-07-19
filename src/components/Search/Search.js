@@ -8,6 +8,8 @@ import classes from './Search.module.css';
 import RouteControls from './../RouteControls/RouteControls.js';
 import {isWithinBoundingBox} from './../../util/LatLngUtil';
 import config from './../../config';
+import {connect} from 'react-redux';
+import * as actionTypes from '../../store/actions/index';
 
 
 const buildAddresFromPlaceProperties = (properties) => {
@@ -54,7 +56,7 @@ const buildInputTextFromSelectedPlace= (selectedPlace)=>{
 }
 
 
-export default function Search(props) {
+function Search(props) {
 
 let autoCompleteErrorMessage = 'Błąd. Spróbuj ponownie później';
 const CancelToken = axios.CancelToken;
@@ -64,7 +66,7 @@ let cancel;
   const [options, setOptions] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState(buildInputTextFromSelectedPlace(props.selectedPlace));
+  const [inputValue, setInputValue] = React.useState(buildInputTextFromSelectedPlace(props.targetPlace));
   
   const handleChange = (event) => {
     setInputValue(event.target.value);
@@ -92,7 +94,8 @@ let cancel;
             if(axios.isCancel(e)){
             }else{
             setLoading(false);
-            props.clicked({...props.selectedPlace, error: true})
+            // props.clicked({...props.targetPlace, error: true})
+            props.setTargetPlace({...props.targetPlace, error: true});
             }
         })
       }, 500),
@@ -120,16 +123,16 @@ let cancel;
   }, [open]);
 
   React.useEffect(()=>{
-    if(props.selectedPlace.autocomplete === false || (props.selectedPlace.autocomplete === true && props.selectedPlace.error)){
-    setInputValue(buildInputTextFromSelectedPlace(props.selectedPlace));
+    if(props.targetPlace.autocomplete === false || (props.targetPlace.autocomplete === true && props.targetPlace.error)){
+    setInputValue(buildInputTextFromSelectedPlace(props.targetPlace));
     }
-  }, [props.selectedPlace])
+  }, [props.targetPlace])
 
   return (
     <div className={classes.TopPanel}>
 
       <div className={classes.ControlsBox}>
-    <RouteControls onRouteTypeChange={props.onRouteTypeChange} activeRouteType={props.routeType}></RouteControls>
+    <RouteControls></RouteControls>
     </div>
 
       <div className={classes.SearchBox}>
@@ -153,11 +156,13 @@ let cancel;
       onChange={(event,value,reason)=>{
           if(reason==='select-option'){
             if(isWithinBoundingBox(props.currentSearchRegion.boundingBox,value.geometry.coordinates)){
-              props.clicked(value);
+              //props.clicked(value);
+              props.setTargetPlace({...value,autocomplete: true});
+              props.clearOffersRoutes();
               setInputValue(buildAddresFromPlaceProperties(value.properties))
             }else{
-              setInputValue(buildAddresFromPlaceProperties(props.selectedPlace.properties))
-              props.handleModalOpen();
+              setInputValue(buildAddresFromPlaceProperties(props.targetPlace.properties))
+              props.openTooFarAwayModal();
             }
           }
           if(reason==='clear'){
@@ -198,4 +203,22 @@ let cancel;
 
 
 }
+
+
+const mapStateToProps = state => {
+  return {
+    // currentRouteType: state.routeControls.currentRouteType
+    targetPlace : state.search.targetPlace
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setTargetPlace: (newTargetPlace)=> dispatch(actionTypes.setTargetPlace(newTargetPlace)),
+    openTooFarAwayModal : ()=> dispatch(actionTypes.openTooFarAwayModal()),
+    clearOffersRoutes : ()=> dispatch(actionTypes.clearOffersRoutes())
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Search);
 

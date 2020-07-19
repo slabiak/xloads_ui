@@ -46,6 +46,10 @@
   display: inline-block;
 }
 
+.RouteInfo{
+    min-height: 50px;
+}
+
 
 @media screen and (min-width: 750px) {
     .Offer{
