@@ -1,16 +1,24 @@
-import React from 'react';
-
-
+import React from "react";
+import { connect } from "react-redux";
 
 function OfferDetails(props) {
-
-    
-
-return (
-    <p>To jest oferta z id nr {props.match.params.id} </p>
-)
-   
-    
+  let offer = props.offers.filter(
+    (offer) => offer.id == props.match.params.id
+  )[0];
+  if (offer != null) {
+    return <p>{offer.title}</p>;
+  } else {
+    return "Brak danych";
+  }
 }
 
-export default OfferDetails;
+const mapStateToProps = (state) => {
+  return {
+    offers: state.offers.offers,
+    routingRequestState: state.offers.routingRequestState,
+    targetPlace: state.search.targetPlace,
+    routeType: state.routeControls.currentRouteType,
+  };
+};
+
+export default connect(mapStateToProps)(OfferDetails);
