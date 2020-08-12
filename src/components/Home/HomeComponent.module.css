@@ -1,0 +1,78 @@
+.RightPane {
+}
+
+.Container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 40px 120px 155px auto 50px;
+  grid-template-areas:
+    "header"
+    "search"
+    "settings"
+    "offers"
+    "pagination";
+  height: 100%;
+}
+
+.ContainerMap {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 51px auto 50px;
+  grid-template-areas:
+    "offers"
+    "map"
+    "pagination";
+  height: 100vh;
+}
+
+.Search {
+  grid-area: search;
+}
+
+.Pagination {
+  grid-area: pagination;
+  background-color: #f2f4f5;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 4px 8px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
+}
+
+@media only screen and (min-width: 600px) {
+  .Container {
+    grid-template-rows: 40px 120px 155px auto 50px;
+  }
+}
+
+@media only screen and (min-width: 1270px) {
+  .Container {
+    display: grid;
+    grid-template-columns: 650px minmax(650px, auto);
+    grid-template-rows: 40px 90px auto 50px;
+    grid-template-areas:
+      "header header"
+      "settings search"
+      "offers map"
+      "pagination map";
+    height: 100vh;
+  }
+}
