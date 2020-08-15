@@ -7,32 +7,24 @@ import Search from "../../Search/Search";
 import OffersHeader from "../../Offers/OffersHeader/OffersHeader";
 
 function OfferDetails(props) {
-    const [currentView, setCurrentView] = React.useState("list");
-    const onChangeViewHandler = (e, newView) => {
-        e.preventDefault();
-        setCurrentView(newView);
-    };
-
     let offer = props.offers.filter(
         (offer) => offer.id == props.match.params.id
     )[0];
-    let header = currentView === "list" ? <Header/> : null;
+    let header = props.currentView === "list" ? <Header/> : null;
     let offerPresent = null;
     if (offer != null) {
         let offersHeader = (
             <OffersHeader
                 numberOfOffers={props.numberOfOffers}
-                currentView={props.currentView}
-                onChangeViewHandler={onChangeViewHandler}
             />
         );
 
-        let search = currentView === "list" ? <Search></Search> : null;
+        let search = props.currentView === "list" ? <Search></Search> : null;
         let map = (
-            <MapComp view={currentView} hooveredOffer={props.hooveredOffer}></MapComp>
+            <MapComp view={props.currentView} hooveredOffer={props.hooveredOffer}></MapComp>
         );
 
-        let offerDetail = currentView === "list" ? <p>{offer.title}</p> : null;
+        let offerDetail = props.currentView === "list" ? <p>{offer.title}</p> : null;
 
         let homePage = (
             <React.Fragment>
@@ -44,7 +36,7 @@ function OfferDetails(props) {
         offerPresent = (
             <div
                 className={
-                    currentView === "list" ? classes.Container : classes.ContainerMap
+                    props.currentView === "list" ? classes.Container : classes.ContainerMap
                 }
             >
                 {header}
@@ -60,7 +52,7 @@ function OfferDetails(props) {
         offerPresent = (
             <div
                 className={
-                    currentView === "list" ? classes.Container : classes.ContainerMap
+                    props.currentView === "list" ? classes.Container : classes.ContainerMap
                 }
             >
                 {header}
@@ -77,6 +69,7 @@ const mapStateToProps = (state) => {
         routingRequestState: state.offers.routingRequestState,
         targetPlace: state.search.targetPlace,
         routeType: state.routeControls.currentRouteType,
+        currentView: state.settings.currentView
     };
 };
 

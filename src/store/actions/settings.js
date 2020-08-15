@@ -7,3 +7,9 @@ export const updateSettings = (newSettings) => {
     }
 };
 
+export const setCurrentView = (newView) => {
+    return {
+        type: actionTypes.SET_CURRENT_VIEW,
+        newView: newView
+    }
+};

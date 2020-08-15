@@ -11,7 +11,6 @@ import {connect} from "react-redux";
 import * as actionTypes from "../../store/actions/index";
 
 function HomeComponent(props) {
-    const [currentView, setCurrentView] = React.useState("list");
 
     const onChangePageHandler = (event, value) => {
         let requestParams = {
@@ -23,11 +22,6 @@ function HomeComponent(props) {
             limit: 5,
         };
         props.makeOffersPageRequest(requestParams);
-    };
-
-    const onChangeViewHandler = (e, newView) => {
-        e.preventDefault();
-        setCurrentView(newView);
     };
 
     useEffect(() => {
@@ -66,17 +60,14 @@ function HomeComponent(props) {
         </Modal>
     );
 
-    let header = currentView === "list" ? <Header/> : null;
+    let header = props.currentView === "list" ? <Header/> : null;
     let offers = (
-        <Offers
-            currentView={currentView}
-            onChangeViewHandler={onChangeViewHandler}
-        ></Offers>
+        <Offers></Offers>
     );
-    let settings = currentView === "list" ? <Settings/> : null;
-    let search = currentView === "list" ? <Search></Search> : null;
+    let settings = props.currentView === "list" ? <Settings/> : null;
+    let search = props.currentView === "list" ? <Search></Search> : null;
     let map = (
-        <MapComp view={currentView} hooveredOffer={props.hooveredOffer}></MapComp>
+        <MapComp view={props.currentView} hooveredOffer={props.hooveredOffer}></MapComp>
     );
     let pagination = (
         <div className={classes.Pagination}>
@@ -105,7 +96,7 @@ function HomeComponent(props) {
     return (
         <div
             className={
-                currentView === "list" ? classes.Container : classes.ContainerMap
+                props.currentView === "list" ? classes.Container : classes.ContainerMap
             }
         >
             {header}
@@ -126,6 +117,7 @@ const mapStateToProps = (state) => {
         priceFrom: state.settings.priceFrom,
         priceTo: state.settings.priceTo,
         tooFarAwayModalOpened: state.search.openTooFarAwayModal,
+        currentView: state.settings.currentView
     };
 };
 

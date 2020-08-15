@@ -13,7 +13,8 @@ export {
 
 
 export {
-    updateSettings
+    updateSettings,
+    setCurrentView
 } from './settings';
 
 

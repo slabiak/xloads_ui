@@ -74,8 +74,7 @@ function Offers(props) {
         offersHeader = null;
         spinner = <div className={classes.SpinnerWrapper}><CircularProgress size={30}></CircularProgress></div>
     } else if (!props.offersRequestState2.loading && props.offersRequestState2.responseCode === 200) {
-        offersHeader = <OffersHeader numberOfOffers={props.numberOfOffers} currentView={props.currentView}
-                                     onChangeViewHandler={props.onChangeViewHandler}/>;
+        offersHeader = <OffersHeader numberOfOffers={props.numberOfOffers}/>;
         offers = (<div className={classes.UlWrapper}>
             <ul className={classes.OffersItems}>
                 {offers}
@@ -104,7 +103,8 @@ const mapStateToProps = state => {
         routingRequestState: state.offers.routingRequestState,
         targetPlace: state.search.targetPlace,
         routeType: state.routeControls.currentRouteType,
-        numberOfOffers: state.offers.numberOfOffers
+        numberOfOffers: state.offers.numberOfOffers,
+        currentView: state.settings.currentView
     };
 }
 
