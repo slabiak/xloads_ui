@@ -1,45 +1,45 @@
-.OffersHeader{
+.OffersHeader {
     padding-left: 20px;
     display: flex;
     justify-content: space-between;
     background-color: white;
 }
 
-.ListTypeContainer{
+.ListTypeContainer {
     padding-right: 15px;
     height: 35px;
 }
 
-.ListType{
+.ListType {
     list-style: none;
     margin-bottom: 0;
     height: 100%;
 }
 
-.ListType li{
+.ListType li {
     display: inline-block;
     padding: 0 8px;
     height: 100%;
 }
 
-.ListType .active{
+.ListType .active {
     display: inline-block;
     padding: 0 8px;
     background-color: #F2F4F5;
     height: 100%;
 }
 
-.ListType li a{
+.ListType li a {
     text-decoration: none;
     color: #444;
 }
 
-@media only screen and (min-width: 1270px)  {
-    .ListTypeContainer{
+@media only screen and (min-width: 1270px) {
+    .ListTypeContainer {
         display: none;
     }
 
-    .OffersHeader{
+    .OffersHeader {
         background-color: #F2F4F5;
     }
 }

@@ -1,9 +1,9 @@
 .ActiveButton {
-    background:#adff2f;
+    background: #adff2f;
     border-width: 1px;
 }
 
 .InactiveButton {
-    background:none;
+    background: none;
     border-width: 1px
 }

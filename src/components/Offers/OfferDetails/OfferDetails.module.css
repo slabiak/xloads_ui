@@ -1,47 +1,39 @@
 .OfferDetail {
-  grid-area: offer_detail;
+    grid-area: offer_detail;
 }
 
 .Container {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 40px 120px auto;
-  grid-template-areas:
-    "header"
-    "search"
-    "offer_detail";
-  height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 40px 120px auto;
+    grid-template-areas: "header" "search" "offer_detail";
+    height: 100%;
 }
 
 .ContainerMap {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 51px auto;
-  grid-template-areas:
-    "offer_detail"
-    "map";
-  height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 51px auto;
+    grid-template-areas: "offer_detail" "map";
+    height: 100vh;
 }
 
 .Search {
-  grid-area: search;
+    grid-area: search;
 }
 
 @media only screen and (min-width: 600px) {
-  .Container {
-    grid-template-rows: 40px 120px auto;
-  }
+    .Container {
+        grid-template-rows: 40px 120px auto;
+    }
 }
 
 @media only screen and (min-width: 1270px) {
-  .Container {
-    display: grid;
-    grid-template-columns: 650px minmax(650px, auto);
-    grid-template-rows: 40px 90px auto;
-    grid-template-areas:
-      "header header"
-      "offer_detail search"
-      "offer_detail map";
-    height: 100vh;
-  }
+    .Container {
+        display: grid;
+        grid-template-columns: 650px minmax(650px, auto);
+        grid-template-rows: 40px 90px auto;
+        grid-template-areas: "header header" "offer_detail search" "offer_detail map";
+        height: 100vh;
+    }
 }

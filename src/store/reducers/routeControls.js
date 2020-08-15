@@ -1,19 +1,19 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    currentRouteType : 'foot'
+    currentRouteType: 'foot'
 }
 
 const reducer = (state = initialState, action) => {
-    switch( action.type){
+    switch (action.type) {
         case actionTypes.SET_ROUTE_TYPE:
             return {
                 ...state,
-                currentRouteType : action.newRouteType
+                currentRouteType: action.newRouteType
             }
-        default:  
+        default:
             return state;
-    }  
+    }
 }
 
 

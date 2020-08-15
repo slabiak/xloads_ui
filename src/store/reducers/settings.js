@@ -8,14 +8,14 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-    switch( action.type){
+    switch (action.type) {
         case actionTypes.UPDATE_SETTINGS:
             return {
                 ...action.newSettings
             }
-        default:  
+        default:
             return state;
-    }  
+    }
 }
 
 

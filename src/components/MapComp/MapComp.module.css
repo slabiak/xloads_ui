@@ -1,7 +1,7 @@
-.Map{
-  display:flex;
-  flex: 1;
-  grid-area: map;
+.Map {
+    display: flex;
+    flex: 1;
+    grid-area: map;
 }
 
 

@@ -3,7 +3,8 @@
     list-style: none;
     align-items: center;
 }
-.Offers{
+
+.Offers {
     background-color: #F2F4F5;
     grid-area: offers;
     height: 100%;
@@ -13,15 +14,15 @@
     flex-direction: column;
 }
 
-.SpinnerWrapper{
-align-self: center;
-justify-self: center;
-margin-bottom: auto;
-margin-top: auto;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
+.SpinnerWrapper {
+    align-self: center;
+    justify-self: center;
+    margin-bottom: auto;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 

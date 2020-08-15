@@ -12,8 +12,8 @@
 
 @media screen and (min-width: 1250px) {
     .TopPanel {
-    display:flex;
-    background-color: #F2F4F5;
+        display: flex;
+        background-color: #F2F4F5;
     }
 }
 
@@ -35,12 +35,12 @@
 } */
 
 .SearchBox {
-  width: 100%;
-  max-width: 400px;
-  padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
 }
 
 
 .ControlsBox {
     padding: 10px;
-    }
+}

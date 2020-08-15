@@ -1,5 +1,5 @@
 export {
- changeRouteType
+    changeRouteType
 } from './routeControls';
 
 
@@ -9,18 +9,17 @@ export {
     makeRouteRequest,
     setCurrentRouteToFetch,
     setHooveredOffer
-   } from './offers';
-   
+} from './offers';
 
-   export {
+
+export {
     updateSettings
-   } from './settings';
-   
+} from './settings';
 
-   
-   export {
+
+export {
     openTooFarAwayModal,
     hideTooFarAwayModal,
     setTargetPlace
-   } from './search';
+} from './search';
    
