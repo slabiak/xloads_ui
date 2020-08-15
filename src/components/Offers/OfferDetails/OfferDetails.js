@@ -21,7 +21,7 @@ function OfferDetails(props) {
 
         let search = props.currentView === "list" ? <Search></Search> : null;
         let map = (
-            <MapComp view={props.currentView} hooveredOffer={props.hooveredOffer}></MapComp>
+            <MapComp offerDetailView={true} offerDetailId={props.match.params.id} hooveredOffer={props.hooveredOffer}></MapComp>
         );
 
         let offerDetail = props.currentView === "list" ? <p>{offer.title}</p> : null;

@@ -95,13 +95,19 @@ class MapComp extends Component {
             icon={iconTarget}
             position={center}>
         </Marker>)
-        let offersMarkers = this.props.offers.map(offer => <Marker onmouseout={this.onMouseOutOfMarkerHandler}
+        let offers = null;
+        if(this.props.offerDetailView){
+            offers =  this.props.offers.filter(offer=>offer.id==this.props.offerDetailId);
+        } else {
+            offers = this.props.offers;
+        }
+        let offersMarkers = offers.map(offer => <Marker onmouseout={this.onMouseOutOfMarkerHandler}
                                                                    onmouseover={() => this.onMouseOverMarkerHandler(offer.id)}
                                                                    onclick={() => this.markerClickedHandler(offer.id)}
                                                                    key={offer.id}
                                                                    position={[offer.coordinates.lat, offer.coordinates.lng]}></Marker>)
         let routes = null
-        var offersWithRoute = this.props.offers.filter(offer => !offer.calculationRequired)
+        var offersWithRoute = offers.filter(offer => !offer.calculationRequired)
         if (offersWithRoute.length > 0) {
             routes = offersWithRoute.map(offer => {
                     let routeStyle = {color: this.state.colors[0], weight: 4, opacity: 1};
