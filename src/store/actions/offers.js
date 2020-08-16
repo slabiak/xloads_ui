@@ -100,6 +100,52 @@ export const setOffers = (offers) => {
 }
 
 
+export const makeFetchSingleOfferRequest = (requestParams) => {
+    return dispatch => {
+        dispatch(setOffersLoading(true));
+        dispatch(setOffers([]));
+
+        let apiUrl = `${config.OFFERS_API_PREFIX}/api/offer/${requestParams.offerId}`;
+        axios.get(apiUrl, {timeout: config.OFFERS_API_TIMEOUT})
+            .then(
+                res => {
+                    let fetchedOffer = {
+                        ...res.data,
+                        calculationRequired: true
+                    };
+
+                    window.scrollTo(0, 0)
+                    let x = [];
+                    x.push(fetchedOffer);
+                    console.log(x);
+
+                    dispatch(onSuccessfulOffersPageRequest({
+                        offers: x,
+                        currentRouteToFetch: x.length > 0 ? 0 : -1,
+                        offersRequestState: {loading: false, responseCode: res.status},
+                        totalPages: 1,
+                        currentPage: 1,
+                        numberOfOffers: 1
+                    }));
+                }
+            )
+            .catch(e => {
+                if (e.response) {
+                    dispatch(onFailedOffersPageRequest({
+                        offersRequestState: {
+                            loading: false,
+                            responseCode: e.response.status
+                        }
+                    }));
+
+                } else if (e.request) {
+                    dispatch(onFailedOffersPageRequest({offersRequestState: {loading: false, responseCode: 1001}}));
+                }
+            });
+    }
+}
+
+
 export const makeOffersPageRequest = (requestParams) => {
     return dispatch => {
         dispatch(setOffersLoading(true));

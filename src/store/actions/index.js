@@ -5,6 +5,7 @@ export {
 
 export {
     makeOffersPageRequest,
+    makeFetchSingleOfferRequest,
     clearOffersRoutes,
     makeRouteRequest,
     setCurrentRouteToFetch,

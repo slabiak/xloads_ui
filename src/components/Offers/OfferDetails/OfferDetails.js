@@ -5,15 +5,30 @@ import Header from "../../Header/Header";
 import MapComp from "../../MapComp/MapComp";
 import Search from "../../Search/Search";
 import OffersHeader from "../../Offers/OffersHeader/OffersHeader";
+import * as actionTypes from "../../../store/actions/index";
 
 function OfferDetails(props) {
+
+    React.useEffect(() => {
+        let offer = props.offers.filter(
+            (offer) => offer.id == props.match.params.id
+        )[0];
+        if (offer == null) {
+            props.makeFetchSingleOfferRequest({offerId: props.match.params.id});
+
+        }
+    }, []);
+
+
     let offer = props.offers.filter(
         (offer) => offer.id == props.match.params.id
     )[0];
     let header = props.currentView === "list" ? <Header/> : null;
-    let offerPresent = null;
+    let offersHeader = null;
+    let homePage = null;
     if (offer != null) {
-        let offersHeader = (
+
+        offersHeader = (
             <OffersHeader
                 numberOfOffers={props.numberOfOffers}
             />
@@ -21,56 +36,51 @@ function OfferDetails(props) {
 
         let search = props.currentView === "list" ? <Search></Search> : null;
         let map = (
-            <MapComp offerDetailView={true} offerDetailId={props.match.params.id} hooveredOffer={props.hooveredOffer}></MapComp>
+            <MapComp offerDetailView={true} offerDetailId={props.match.params.id}
+                     hooveredOffer={props.hooveredOffer}></MapComp>
         );
 
-        let offerDetail = props.currentView === "list" ? <p>{offer.title}</p> : null;
+        // let offerDetail = props.currentView === "list" ? <p>{offer.title}</p> : null;
 
-        let homePage = (
+        homePage = (
             <React.Fragment>
                 {search}
                 {map}
             </React.Fragment>
         );
-
-        offerPresent = (
-            <div
-                className={
-                    props.currentView === "list" ? classes.Container : classes.ContainerMap
-                }
-            >
-                {header}
-
-                <div className={classes.OfferDetail}>
-                    {offersHeader}
-                    {offerDetail}
-                </div>
-                {homePage}
-            </div>
-        );
     } else {
-        offerPresent = (
-            <div
-                className={
-                    props.currentView === "list" ? classes.Container : classes.ContainerMap
-                }
-            >
-                {header}
-            </div>
-        );
     }
 
-    return offerPresent;
+    return (
+
+        <div
+            className={
+                props.currentView === "list" ? classes.Container : classes.ContainerMap
+            }
+        >
+            {header}
+
+            <div className={classes.OfferDetail}>
+                {offersHeader}
+                {/*{offerDetail}*/}
+            </div>
+            {homePage}
+        </div>
+
+    )
 }
 
 const mapStateToProps = (state) => {
     return {
         offers: state.offers.offers,
-        routingRequestState: state.offers.routingRequestState,
-        targetPlace: state.search.targetPlace,
-        routeType: state.routeControls.currentRouteType,
         currentView: state.settings.currentView
     };
 };
 
-export default connect(mapStateToProps)(OfferDetails);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        makeFetchSingleOfferRequest: (requestParams) => dispatch(actionTypes.makeFetchSingleOfferRequest(requestParams))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OfferDetails);
