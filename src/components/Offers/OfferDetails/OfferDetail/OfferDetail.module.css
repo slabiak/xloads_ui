@@ -1,0 +1,21 @@
+.OfferDetailContainer {
+    grid-area: offer_detail;
+    background-color: #F2F4F5;
+    height: 100%;
+    overflow: auto;
+    min-height: calc(100vh - 160px);
+}
+
+.OfferDetailBody {
+    margin: 20px;
+    padding: 0px;
+    background-color: white;
+    height: calc(100vh - 240px);
+}
+
+
+@media only screen and (min-width: 1270px) {
+    .OfferDetailBody {
+        height: calc(100vh - 80px);
+    }
+}

@@ -1,7 +1,3 @@
-.OfferDetail {
-    grid-area: offer_detail;
-}
-
 .Container {
     display: grid;
     grid-template-columns: 1fr;

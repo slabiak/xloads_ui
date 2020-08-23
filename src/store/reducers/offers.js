@@ -127,8 +127,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.ON_SUCCESSFUL_OFFER_PAGE_REQUEST:
             return {
                 ...state,
-                offersRequestState: action.data.offersRequestState,
                 offers: action.data.offers,
+                offersRequestState: action.data.offersRequestState,
                 currentRouteToFetch: action.data.currentRouteToFetch,
                 totalPages: action.data.totalPages,
                 currentPage: action.data.currentPage,

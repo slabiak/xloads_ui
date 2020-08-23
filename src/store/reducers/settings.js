@@ -12,6 +12,7 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.UPDATE_SETTINGS:
             return {
+                ...state,
                 ...action.newSettings
             }
         case actionTypes.SET_CURRENT_VIEW:
