@@ -4,9 +4,25 @@ import * as actionTypes from "../../../../store/actions";
 import {connect} from "react-redux";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import OfferDetailHeader from "./OfferDetailHeader/OfferDetailHeader";
+import ImageGallery from 'react-image-gallery';
+import "react-image-gallery/styles/css/image-gallery.css";
 
 
 function OfferDetail(props) {
+    const images = [
+        {
+            original: 'https://picsum.photos/id/1018/1000/600/',
+            thumbnail: 'https://picsum.photos/id/1018/250/150/',
+        },
+        {
+            original: 'https://picsum.photos/id/1015/1000/600/',
+            thumbnail: 'https://picsum.photos/id/1015/250/150/',
+        },
+        {
+            original: 'https://picsum.photos/id/1019/1000/600/',
+            thumbnail: 'https://picsum.photos/id/1019/250/150/',
+        },
+    ];
 
     React.useEffect(() => {
         let offer = props.offers.filter((offer) => offer.id == props.offerid)[0];
@@ -20,8 +36,13 @@ function OfferDetail(props) {
     if (offer != null) {
         offerDetail = (
             <div className={classes.OfferDetailBody}>
-                <p>{offer.title}</p>
+
+                <p className={classes.OfferTitle}> {offer.title}</p>
+                <p className={classes.OfferPrice}>{offer.price} zł / miesiąc</p>
+                <ImageGallery items={images}/>
+
                 <p>{offer.description}</p>
+
             </div>
         )
     } else if (props.offersRequestState.loading) {

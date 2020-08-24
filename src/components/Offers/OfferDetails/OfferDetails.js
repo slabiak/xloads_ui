@@ -8,11 +8,20 @@ import OfferDetail from "./OfferDetail/OfferDetail";
 
 
 function OfferDetails(props) {
-    let header = props.currentView === "list" ? <Header/> : null;
-    let search = props.currentView === "list" ? <Search/> : null;
+    let header = <Header/>
+    let search = props.currentView === "route" ? <Search/> : null;
+
+    let containerStyle = null;
+    if (props.currentView === "list") {
+        containerStyle = classes.ContainerDescription;
+    } else if (props.currentView === "route") {
+        containerStyle = classes.ContainerRoute;
+    } else {
+        containerStyle = classes.ContainerMap;
+    }
 
     return (
-        <div className={props.currentView === "list" ? classes.Container : classes.ContainerMap}>
+        <div className={containerStyle}>
             {header}
             {search}
             <OfferDetail currentView={props.currentView} offerId={props.match.params.id}/>
