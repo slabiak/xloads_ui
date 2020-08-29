@@ -1,14 +1,14 @@
 import React from "react";
-import classes from "./OfferDetail.module.css";
-import * as actionTypes from "../../../../store/actions";
+import classes from "./OfferDetailDescription.module.css";
+import * as actionTypes from "../../../../store/actions/index";
 import {connect} from "react-redux";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import OfferDetailHeader from "./OfferDetailHeader/OfferDetailHeader";
+import OfferDetailHeader from "./../OfferDetailHeader/OfferDetailHeader";
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 
 
-function OfferDetail(props) {
+function OfferDetailDescription(props) {
     const images = [
         {
             original: 'https://picsum.photos/id/1018/1000/600/',
@@ -74,4 +74,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OfferDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(OfferDetailDescription);

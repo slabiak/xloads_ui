@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import OfferDetails from "./components/Offers/OfferDetails/OfferDetails";
+import OfferDetailPage from "./components/Offers/OfferDetail/OfferDetailPage";
 import {Route, Switch} from "react-router-dom";
 import Home from "./components/Home/HomeComponent";
 import ImageGallery from "react-image-gallery";
@@ -31,7 +31,7 @@ class App extends Component {
                     {/*<p>contact hehe</p>*/}
                     <ImageGallery items={images}/>
                 </Route>
-                <Route path="/offers/:id" component={OfferDetails}></Route>
+                <Route path="/offers/:id" component={OfferDetailPage}></Route>
             </Switch>
         );
     }

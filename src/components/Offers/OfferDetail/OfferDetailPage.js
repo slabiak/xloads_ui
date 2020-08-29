@@ -1,33 +1,33 @@
 import React from "react";
-import classes from "./OfferDetails.module.css";
+import classes from "./OfferDetailPage.module.css";
 import Header from "../../Header/Header";
-import MapComp from "../../MapComp/MapComp";
 import Search from "../../Search/Search";
 import {connect} from "react-redux";
-import OfferDetail from "./OfferDetail/OfferDetail";
+import OfferDetailDescription from "./OfferDetailDescription/OfferDetailDescription";
+import OfferDetailRoute from "./OfferDetailRoute/OfferDetailRoute";
+import OfferDetailMap from "./OfferDetailMap/OfferDetailMap";
 
 
-function OfferDetails(props) {
-    let header = <Header/>
+function OfferDetailPage(props) {
     let search = props.currentView === "route" ? <Search/> : null;
 
     let containerStyle = null;
+    let detail = null;
     if (props.currentView === "list") {
         containerStyle = classes.ContainerDescription;
+        detail = <OfferDetailDescription currentView={props.currentView} offerId={props.match.params.id}/>
     } else if (props.currentView === "route") {
         containerStyle = classes.ContainerRoute;
+        detail = <OfferDetailRoute currentView={props.currentView} offerId={props.match.params.id}/>
     } else {
         containerStyle = classes.ContainerMap;
+        detail = <OfferDetailMap currentView={props.currentView} offerId={props.match.params.id}/>
     }
 
     return (
         <div className={containerStyle}>
-            {header}
-            {search}
-            <OfferDetail currentView={props.currentView} offerId={props.match.params.id}/>
-            <MapComp view={props.currentView} offerDetailView={true} offerDetailId={props.match.params.id}
-                     hooveredOffer={props.hooveredOffer}></MapComp>
-
+            <Header/>
+            {detail}
         </div>
     )
 }
@@ -39,5 +39,5 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(OfferDetails);
+export default connect(mapStateToProps)(OfferDetailPage);
 

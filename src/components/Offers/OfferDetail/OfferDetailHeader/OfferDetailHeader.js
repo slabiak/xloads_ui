@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './OfferDetailHeader.module.css';
 import {connect} from "react-redux";
-import * as actionTypes from "../../../../../store/actions/index";
+import * as actionTypes from "../../../../store/actions/index";
 
 function OfferDetailHeader(props) {
 

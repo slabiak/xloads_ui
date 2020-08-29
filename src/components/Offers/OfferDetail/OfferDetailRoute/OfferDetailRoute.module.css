@@ -1,0 +1,35 @@
+.OfferDetailContainer {
+    grid-area: offer_detail;
+    background-color: #F2F4F5;
+    height: 100%;
+    overflow: auto;
+    min-height: calc(100vh - 160px);
+}
+
+.OfferDetailBody {
+    margin: 20px;
+    padding: 15px;
+    background-color: white;
+    height: calc(100vh - 130px);
+}
+
+.OfferTitle {
+    line-height: 28px;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.OfferPrice {
+    /*display: flex;*/
+    /*flex-direction: row-reverse;*/
+    font-size: 26px;
+    font-weight: 700;
+    color: #303030;
+}
+
+@media only screen and (min-width: 1270px) {
+    .OfferDetailBody {
+        height: calc(100vh - 80px);
+    }
+}

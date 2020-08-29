@@ -9,15 +9,15 @@
 .ContainerRoute {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 40px 120px auto;
-    grid-template-areas: "header" "search" "offer_detail";
+    grid-template-rows: 40px auto;
+    grid-template-areas: "header" "offer_detail";
     height: 100%;
 }
 
 .ContainerMap {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 40px 51px auto;
+    grid-template-rows: 40px 60px auto;
     grid-template-areas: "header" "offer_detail" "map";
     height: 100vh;
 }
