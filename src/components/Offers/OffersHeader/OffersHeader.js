@@ -2,8 +2,11 @@ import React from 'react';
 import classes from './OffersHeader.module.css';
 import {connect} from "react-redux";
 import * as actionTypes from "../../../store/actions/index";
+import {useTranslation} from 'react-i18next'
 
 function OffersHeader(props) {
+
+    const {t, i18n} = useTranslation()
 
     const onChangeViewHandler = (e, newView) => {
         e.preventDefault();
@@ -13,7 +16,7 @@ function OffersHeader(props) {
 
     return (
         <div className={classes.OffersHeader}>
-            <div>Znaleziono: {props.numberOfOffers}</div>
+            <div>{t('found.label')}: {props.numberOfOffers}</div>
             <div className={classes.ListTypeContainer}>
                 <ul className={classes.ListType}>
                     <li className={props.currentView === 'map' ? classes.active : ''}><a href=""

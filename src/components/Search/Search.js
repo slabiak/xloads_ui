@@ -10,6 +10,7 @@ import {isWithinBoundingBox} from './../../util/LatLngUtil';
 import config from './../../config';
 import {connect} from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
+import {useTranslation} from 'react-i18next'
 
 
 const buildAddresFromPlaceProperties = (properties) => {
@@ -61,6 +62,7 @@ function Search(props) {
     const CancelToken = axios.CancelToken;
     let cancel;
 
+    const {t, i18n} = useTranslation()
     const isFirstRun = useRef(true);
     const [options, setOptions] = React.useState([]);
     const [open, setOpen] = React.useState(false);
@@ -175,7 +177,7 @@ function Search(props) {
 
                             <TextField
                                 {...params}
-                                label="Wpisz adres lub przesuń czerwony marker"
+                                label={t('search.label')}
                                 variant="outlined"
                                 onChange={handleChange}
                                 InputProps={{

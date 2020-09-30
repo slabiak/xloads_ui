@@ -1,9 +1,10 @@
-import React, {Component} from "react";
+import React, {Component, Suspense} from "react";
 import OfferDetailPage from "./components/Offers/OfferDetail/OfferDetailPage";
 import {Route, Switch} from "react-router-dom";
 import Home from "./components/Home/HomeComponent";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import './i18n';
 
 class App extends Component {
 
@@ -26,12 +27,14 @@ class App extends Component {
 
         return (
             <Switch>
-                <Route exact path="/" component={Home}></Route>
-                <Route path="/contact">
-                    {/*<p>contact hehe</p>*/}
-                    <ImageGallery items={images}/>
-                </Route>
-                <Route path="/offers/:id" component={OfferDetailPage}></Route>
+                <Suspense fallback={null}>
+                    <Route exact path="/" component={Home}></Route>
+                    <Route path="/contact">
+                        {/*<p>contact hehe</p>*/}
+                        <ImageGallery items={images}/>
+                    </Route>
+                    <Route path="/offers/:id" component={OfferDetailPage}></Route>
+                </Suspense>
             </Switch>
         );
     }

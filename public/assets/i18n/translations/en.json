@@ -1,0 +1,16 @@
+{
+  "sorting.label": "Sort",
+  "latest": "Latest",
+  "highest.price": "Highest price",
+  "lowest.price": "Lowest price",
+  "price.label": "Price",
+  "price.from": "From",
+  "price.to": "To",
+  "found.label": "Found",
+  "added.label": "added",
+  "category.label": "Category",
+  "rooms": "Rooms",
+  "flats": "Flats",
+  "contact": "Contact",
+  "search.label": "Enter address or move red marker"
+}

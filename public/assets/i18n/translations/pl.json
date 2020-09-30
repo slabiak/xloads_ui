@@ -1,0 +1,16 @@
+{
+  "sorting.label": "Sortuj",
+  "latest": "Najnowsze",
+  "highest.price": "Najdroższe",
+  "lowest.price": "Najtańsze",
+  "price.label": "Cena",
+  "price.from": "Od",
+  "price.to": "Do",
+  "found.label": "Znaleziono",
+  "added.label": "dodano",
+  "category.label": "Kategoria",
+  "rooms": "Pokoje",
+  "flats": "Mieszkania",
+  "contact": "Kontakt",
+  "search.label": "Wpisz adres lub przesuń czerwony marker"
+}

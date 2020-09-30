@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react'
 import classes from './Settings.module.css';
 import {connect} from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
+import {useTranslation} from 'react-i18next'
 
 function RouteControls(props) {
     const isFirstRun = useRef(true);
@@ -10,6 +11,8 @@ function RouteControls(props) {
     const [priceFrom, setPriceFrom] = React.useState('');
     const [priceTo, setPriceTo] = React.useState('');
     const [flag, flipFlag] = React.useState(false);
+    const {t, i18n} = useTranslation()
+
 
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
@@ -61,12 +64,12 @@ function RouteControls(props) {
             <div className={classes.SettingsBody}>
 
                 <div class={classes.Setting}>
-                    <div className={classes.SettingHeader}>Kategoria:</div>
+                    <div className={classes.SettingHeader}>{t('category.label')}:</div>
                     <div className={classes.SettingBody}>
                         <select className="custom-select" id="category" onChange={e => handleCategoryChange(e)}
                                 value={category}>
-                            <option value="1">Pokoje</option>
-                            <option value="2">Mieszkania</option>
+                            <option value="1">{t('rooms')}</option>
+                            <option value="2">{t('flats')}</option>
 
                         </select>
                     </div>
@@ -74,27 +77,28 @@ function RouteControls(props) {
 
 
                 <div class={classes.Setting}>
-                    <div className={classes.SettingHeader}>Sortuj:</div>
+                    <div className={classes.SettingHeader}>{t('sorting.label')}:</div>
                     <div className={classes.SettingBody}>
                         <select className="custom-select" id="sorting" onChange={e => handleSortingChange(e)}
                                 value={sortBy}>
-                            <option value="created.desc">Najnowsze</option>
-                            <option value="price.desc">Najdroższe</option>
-                            <option value="price.asc">Najtańsze</option>
+                            <option value="created.desc">{t('latest')}</option>
+                            <option value="price.desc">{t('highest.price')}</option>
+                            <option value="price.asc">{t('lowest.price')}</option>
                         </select>
                     </div>
                 </div>
                 <div class={classes.Setting}>
-                    <div className={classes.SettingHeader}>Cena</div>
+                    <div className={classes.SettingHeader}>{t('price.label')}</div>
                     <div className={classes.SettingBody}>
 
                         <div className={classes.FormWrapper}><input type="number" className='form-control'
-                                                                    id="priceFrom" placeholder="Od"
+                                                                    id="priceFrom" placeholder={t('price.from')}
                                                                     onBlur={handlePriceFromBlur}
                                                                     onChange={e => handlePriceFromChange(e)}
                                                                     value={priceFrom}></input></div>
                         <div className={classes.FormWrapper}><input type="number" className='form-control' id="priceTo"
-                                                                    placeholder="Do" onBlur={handlePriceToBlur}
+                                                                    placeholder={t('price.to')}
+                                                                    onBlur={handlePriceToBlur}
                                                                     onChange={e => handlePriceToChange(e)}
                                                                     value={priceTo}></input></div>
                     </div>

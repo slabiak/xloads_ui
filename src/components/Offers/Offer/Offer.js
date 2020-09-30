@@ -3,11 +3,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import classes from './Offer.module.css';
 import moment from 'moment';
 import 'moment/locale/pl'
+import {useTranslation} from "react-i18next";
 
 
 function Offer(props) {
 
-    moment.locale('pl');
+    const {t, i18n} = useTranslation()
+    moment.locale('en');
     let mode = null;
     if (props.mode === 'transit') {
         mode = 'komunikacją';
@@ -105,7 +107,7 @@ function Offer(props) {
 
                 </div>
                 <div className={classes.OfferFooter}>
-                    dodano {created}
+                    {t('added.label')} {created}
                 </div>
 
                 {/* <p>
