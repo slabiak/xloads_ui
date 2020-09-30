@@ -4,6 +4,10 @@
     align-items: center;
 }
 
+.OffersItems a {
+    color: black;
+}
+
 .Offers {
     background-color: #F2F4F5;
     grid-area: offers;
