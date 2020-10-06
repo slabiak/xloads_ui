@@ -12,5 +12,20 @@
   "rooms": "Rooms",
   "flats": "Flats",
   "contact": "Contact",
-  "search.label": "Enter address or move red marker"
+  "search.label": "Enter address or move red marker",
+  "by.foot": "by foot",
+  "by.car": "by car",
+  "by.bike": "by bike",
+  "by.transit": "by transit",
+  "distance": "distance",
+  "currency": "USD",
+  "route.calculation": "Route calculation",
+  "try.again": "Try again",
+  "route.calculation.error": "Route calculation error",
+  "lines": "lines",
+  "transfers": "transfers",
+  "month": "month",
+  "map": "Map",
+  "list": "List",
+  "error": "Error"
 }

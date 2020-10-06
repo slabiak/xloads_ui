@@ -12,13 +12,13 @@ function Offer(props) {
     moment.locale('en');
     let mode = null;
     if (props.mode === 'transit') {
-        mode = 'komunikacją';
+        mode = t('by.transit');
     } else if (props.mode === 'car') {
-        mode = 'samochodem';
+        mode = t('by.car');
     } else if (props.mode === 'foot') {
-        mode = 'pieszo';
+        mode = t('by.foot');
     } else if (props.mode === 'bike') {
-        mode = 'rowerem';
+        mode = t('by.bike');
     }
     let timeIcon = <svg className="bi bi-alarm-fill" width="0.8em" height="0.8em" viewBox="0 0 16 16"
                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +29,7 @@ function Offer(props) {
     let routeInfo = null;
     let created = moment(props.data.created).fromNow();
     if (props.data.calculationRequired && props.data && props.routingRequestState.loading) {
-        spinner = <React.Fragment> <CircularProgress size={20}/> Kalkulacja trasy</React.Fragment>;
+        spinner = <React.Fragment> <CircularProgress size={20}/> {t('route.calculation')}</React.Fragment>;
     } else if (!props.data.calculationRequired && props.data) {
 
 
@@ -43,13 +43,13 @@ function Offer(props) {
             transitInfo = (
                 <React.Fragment>
                     <p>
-                        linie: {routes.toString()} <br/>
-                        przesiadki: {props.data.paths[0].transfers}
+                        t('lines'): {routes.toString()} <br/>
+                        t('transfers'): {props.data.paths[0].transfers}
                     </p>
                 </React.Fragment>
             )
         } else {
-            transitInfo = 'dystans: ' + Math.round((props.data.paths[0].totalDistance / 1000) * 100) / 100 + ' km';
+            transitInfo = t('distance') + ': ' + Math.round((props.data.paths[0].totalDistance / 1000) * 100) / 100 + ' km';
         }
 
         routeInfo =
@@ -61,10 +61,10 @@ function Offer(props) {
             </React.Fragment>
     } else {
         spinner = null;
-        routeInfo = <React.Fragment>Błąd kalkulacji trasy {props.routingRequestState.responseCode}<br/>
+        routeInfo = <React.Fragment>t('route.calculation.error') {props.routingRequestState.responseCode}<br/>
             <a href="" onClick={(e) => {
                 props.onRecalculateRoutesHandler(e)
-            }}>Oblicz ponownie</a>
+            }}>t('try.again')</a>
         </React.Fragment>
     }
     return (
@@ -99,7 +99,7 @@ function Offer(props) {
                         <b>{props.data.title}</b>
                     </div>
                     <div className={classes.OfferDescription}>
-                        <p className={classes.OfferPrice}>{props.data.price} zł</p>
+                        <p className={classes.OfferPrice}>{props.data.price} {t('currency')}</p>
                     </div>
                     <div className={classes.RouteInfo}>
                         {spinner} {routeInfo}

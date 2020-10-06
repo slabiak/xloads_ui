@@ -6,9 +6,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import OfferDetailHeader from "./../OfferDetailHeader/OfferDetailHeader";
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
+import {useTranslation} from 'react-i18next'
 
 
 function OfferDetailDescription(props) {
+
+    const {t, i18n} = useTranslation()
+
     const images = [
         {
             original: 'https://picsum.photos/id/1018/1000/600/',
@@ -38,7 +42,7 @@ function OfferDetailDescription(props) {
             <div className={classes.OfferDetailBody}>
 
                 <p className={classes.OfferTitle}> {offer.title}</p>
-                <p className={classes.OfferPrice}>{offer.price} zł / miesiąc</p>
+                <p className={classes.OfferPrice}>{offer.price} {t('currency')} / {t('month')}</p>
                 <ImageGallery items={images}/>
 
                 <p>{offer.description}</p>

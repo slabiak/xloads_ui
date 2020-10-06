@@ -82,8 +82,9 @@ function Offers(props) {
         </div>)
         spinner = null;
     } else {
-        spinner = <div className={classes.SpinnerWrapper}><p>Błąd {props.offersRequestState2.responseCode}</p> <Button
-            onClick={() => retryToLoadOffersButtonClicked()} variant="contained">Spróbuj ponownie</Button></div>;
+        spinner =
+            <div className={classes.SpinnerWrapper}><p>t('error') {props.offersRequestState2.responseCode}</p> <Button
+                onClick={() => retryToLoadOffersButtonClicked()} variant="contained">t('try.again')</Button></div>;
     }
 
     return (

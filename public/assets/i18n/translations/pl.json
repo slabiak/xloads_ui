@@ -12,5 +12,20 @@
   "rooms": "Pokoje",
   "flats": "Mieszkania",
   "contact": "Kontakt",
-  "search.label": "Wpisz adres lub przesuń czerwony marker"
+  "search.label": "Wpisz adres lub przesuń czerwony marker",
+  "by.foot": "pieszo",
+  "by.car": "samochodem",
+  "by.bike": "rowerem",
+  "by.transit": "komunikacją",
+  "distance": "dystans",
+  "currency": "PLN",
+  "route.calculation": "Kalkulacja trasy",
+  "try.again": "Oblicz ponownie",
+  "route.calculation.error": "Błąd kalkulacji trasy",
+  "lines": "linie",
+  "transfers": "przesiadki",
+  "month": "miesiąc",
+  "map": "Mapa",
+  "list": "Lista",
+  "error": "Błąd"
 }
