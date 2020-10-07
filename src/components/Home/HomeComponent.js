@@ -33,7 +33,9 @@ function HomeComponent(props) {
             limit: 5,
             pageNumber: props.currentPage - 1,
         };
-        props.makeOffersPageRequest(requestParams);
+        if (props.offers.length === 0) {
+            props.makeOffersPageRequest(requestParams);
+        }
     }, []);
 
     let placeTooFarAwayModal = (

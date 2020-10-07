@@ -19,7 +19,10 @@ function Offers(props) {
                 toLat: props.targetPlace.geometry.coordinates[1],
                 toLng: props.targetPlace.geometry.coordinates[0]
             }
-            props.makeRouteRequest(requestParams);
+
+            if (props.data2[props.currentRouteToFetch].calculationRequired) {
+                props.makeRouteRequest(requestParams);
+            }
         }
     }, [props.currentRouteToFetch]);
 

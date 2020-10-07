@@ -29,7 +29,7 @@ function OfferDetailDescription(props) {
     ];
 
     React.useEffect(() => {
-        let offer = props.offers.filter((offer) => offer.id == props.offerid)[0];
+        let offer = props.offers.filter((offer) => offer.id == props.offerId)[0];
         if (offer == null) {
             props.makeFetchSingleOfferRequest({offerId: props.offerId});
         }
