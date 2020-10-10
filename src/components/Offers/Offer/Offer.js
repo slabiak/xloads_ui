@@ -61,10 +61,10 @@ function Offer(props) {
             </React.Fragment>
     } else {
         spinner = null;
-        routeInfo = <React.Fragment>t('route.calculation.error') {props.routingRequestState.responseCode}<br/>
+        routeInfo = <React.Fragment>{t('route.calculation.error')} {props.routingRequestState.responseCode}<br/>
             <a href="" onClick={(e) => {
                 props.onRecalculateRoutesHandler(e)
-            }}>t('try.again')</a>
+            }}>{t('try.again')}</a>
         </React.Fragment>
     }
     return (

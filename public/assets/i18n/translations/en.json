@@ -26,6 +26,8 @@
   "transfers": "transfers",
   "month": "month",
   "map": "Map",
+  "route": "Route",
+  "description": "Description",
   "list": "List",
   "error": "Error"
 }

@@ -10,7 +10,7 @@ import RouteControls from "../../../RouteControls/RouteControls";
 function OfferDetailRoute(props) {
 
     return (
-        <div className={classes.OfferDetailContainer}>
+        <div className={classes.OfferDetailRoute}>
             <OfferDetailHeader/>
             <div className={classes.OfferDetailBody}>
                 <RouteControls/>

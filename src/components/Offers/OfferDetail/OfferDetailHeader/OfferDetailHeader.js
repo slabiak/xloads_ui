@@ -2,8 +2,11 @@ import React from 'react';
 import classes from './OfferDetailHeader.module.css';
 import {connect} from "react-redux";
 import * as actionTypes from "../../../../store/actions/index";
+import {useTranslation} from 'react-i18next'
 
 function OfferDetailHeader(props) {
+
+    const {t, i18n} = useTranslation()
 
     const onChangeViewHandler = (e, newView) => {
         e.preventDefault();
@@ -15,13 +18,13 @@ function OfferDetailHeader(props) {
             <div className={classes.ListTypeContainer}>
                 <ul className={classes.ListType}>
                     <li className={props.currentView === 'map' ? classes.active : ''}><a href=""
-                                                                                         onClick={(e) => onChangeViewHandler(e, 'map')}>Mapa</a>
+                                                                                         onClick={(e) => onChangeViewHandler(e, 'map')}>{t('map')}</a>
                     </li>
                     <li className={props.currentView === 'route' ? classes.active : ''}><a href=""
-                                                                                           onClick={(e) => onChangeViewHandler(e, 'route')}>Trasa</a>
+                                                                                           onClick={(e) => onChangeViewHandler(e, 'route')}>{t('route')}</a>
                     </li>
                     <li className={props.currentView == 'list' ? classes.active : ''}><a href="#"
-                                                                                         onClick={(e) => onChangeViewHandler(e, 'list')}>Opis</a>
+                                                                                         onClick={(e) => onChangeViewHandler(e, 'list')}>{t('description')}</a>
                     </li>
                 </ul>
             </div>

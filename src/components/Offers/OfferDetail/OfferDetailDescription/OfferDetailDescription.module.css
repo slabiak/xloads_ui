@@ -1,5 +1,5 @@
-.OfferDetailContainer {
-    grid-area: offer_detail;
+.OfferDetailDescription {
+    grid-area: offer_description;
     background-color: #F2F4F5;
     height: 100%;
     overflow: auto;
@@ -30,6 +30,6 @@
 
 @media only screen and (min-width: 1270px) {
     .OfferDetailBody {
-        height: calc(100vh - 80px);
+        height: calc(100vh - 90px);
     }
 }

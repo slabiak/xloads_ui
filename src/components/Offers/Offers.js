@@ -7,8 +7,12 @@ import {Button} from '@material-ui/core';
 import {Link} from "react-router-dom";
 import {connect} from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
+import {useTranslation} from 'react-i18next'
 
 function Offers(props) {
+
+    const {t, i18n} = useTranslation()
+
 
     React.useEffect(() => {
         if (props.currentRouteToFetch >= 0) {
@@ -86,8 +90,8 @@ function Offers(props) {
         spinner = null;
     } else {
         spinner =
-            <div className={classes.SpinnerWrapper}><p>t('error') {props.offersRequestState2.responseCode}</p> <Button
-                onClick={() => retryToLoadOffersButtonClicked()} variant="contained">t('try.again')</Button></div>;
+            <div className={classes.SpinnerWrapper}><p>{t('error')} {props.offersRequestState2.responseCode}</p> <Button
+                onClick={() => retryToLoadOffersButtonClicked()} variant="contained">{t('try.again')}</Button></div>;
     }
 
     return (

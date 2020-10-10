@@ -1,5 +1,5 @@
-.OfferDetailContainer {
-    grid-area: offer_detail;
+.OfferDetailRoute {
+    grid-area: offer_route;
     background-color: #F2F4F5;
     height: 100%;
     overflow: auto;

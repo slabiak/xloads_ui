@@ -1,5 +1,5 @@
-.OfferDetailContainer {
-    grid-area: offer_detail;
+.OfferDetailMap {
+    grid-area: offer_map;
     background-color: #F2F4F5;
     height: 100%;
 }

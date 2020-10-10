@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import OfferDetailDescription from "./OfferDetailDescription/OfferDetailDescription";
 import OfferDetailRoute from "./OfferDetailRoute/OfferDetailRoute";
 import OfferDetailMap from "./OfferDetailMap/OfferDetailMap";
+import MapComp from "../../MapComp/MapComp";
 
 
 function OfferDetailPage(props) {
@@ -15,7 +16,14 @@ function OfferDetailPage(props) {
     let detail = null;
     if (props.currentView === "list") {
         containerStyle = classes.ContainerDescription;
-        detail = <OfferDetailDescription currentView={props.currentView} offerId={props.match.params.id}/>
+        detail =
+            <React.Fragment> <OfferDetailDescription currentView={props.currentView} offerId={props.match.params.id}/>
+                <div className={classes.SearchWrapper}>
+                    <Search></Search>
+                </div>
+                <MapComp view={props.currentView} offerDetailView={true} offerDetailId={props.match.params.id}
+                         hooveredOffer={props.hooveredOffer}></MapComp>
+            </React.Fragment>
     } else if (props.currentView === "route") {
         containerStyle = classes.ContainerRoute;
         detail = <OfferDetailRoute currentView={props.currentView} offerId={props.match.params.id}/>

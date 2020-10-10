@@ -58,7 +58,7 @@ function OfferDetailDescription(props) {
     offerDetail = props.currentView === "list" ? offerDetail : null;
 
     return (
-        <div className={classes.OfferDetailContainer}>
+        <div className={classes.OfferDetailDescription}>
             <OfferDetailHeader offerId={props.offerId}/>
             {offerDetail}
         </div>

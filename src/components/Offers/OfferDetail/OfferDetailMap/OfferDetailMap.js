@@ -11,7 +11,7 @@ function OfferDetailMap(props) {
 
     return (
         <React.Fragment>
-            <div className={classes.OfferDetailContainer}>
+            <div className={classes.OfferDetailMap}>
                 <OfferDetailHeader/>
             </div>
             <MapComp view={props.currentView} offerDetailView={true} offerDetailId={props.offerId}

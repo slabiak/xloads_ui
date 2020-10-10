@@ -20,10 +20,10 @@ function OffersHeader(props) {
             <div className={classes.ListTypeContainer}>
                 <ul className={classes.ListType}>
                     <li className={props.currentView === 'map' ? classes.active : ''}><a href=""
-                                                                                         onClick={(e) => onChangeViewHandler(e, 'map')}>t('map')</a>
+                                                                                         onClick={(e) => onChangeViewHandler(e, 'map')}>{t('map')}</a>
                     </li>
                     <li className={props.currentView == 'list' ? classes.active : ''}><a href="#"
-                                                                                         onClick={(e) => onChangeViewHandler(e, 'list')}>t('list')</a>
+                                                                                         onClick={(e) => onChangeViewHandler(e, 'list')}>{t('list')}</a>
                     </li>
                 </ul>
             </div>
