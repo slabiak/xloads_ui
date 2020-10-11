@@ -2,7 +2,6 @@ import React from "react";
 import classes from "./OfferDetailDescription.module.css";
 import * as actionTypes from "../../../../store/actions/index";
 import {connect} from "react-redux";
-import CircularProgress from '@material-ui/core/CircularProgress';
 import OfferDetailHeader from "./../OfferDetailHeader/OfferDetailHeader";
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
@@ -28,38 +27,25 @@ function OfferDetailDescription(props) {
         },
     ];
 
-    React.useEffect(() => {
-        let offer = props.offers.filter((offer) => offer.id == props.offerId)[0];
-        if (offer == null) {
-            props.makeFetchSingleOfferRequest({offerId: props.offerId});
-        }
-    }, []);
 
-    let offer = props.offers.filter((offer) => offer.id == props.offerId)[0];
     let offerDetail = "";
-    if (offer != null) {
+    if (props.offer && props.currentView === "list")
         offerDetail = (
             <div className={classes.OfferDetailBody}>
 
-                <p className={classes.OfferTitle}> {offer.title}</p>
-                <p className={classes.OfferPrice}>{offer.price} {t('currency')} / {t('month')}</p>
+                <p className={classes.OfferTitle}> {props.offer.title}</p>
+                <p className={classes.OfferPrice}>{props.offer.price} {t('currency')} / {t('month')}</p>
                 <ImageGallery items={images}/>
 
-                <p>{offer.description}</p>
+                <p>{props.offer.description}</p>
 
             </div>
-        )
-    } else if (props.offersRequestState.loading) {
-        offerDetail = <CircularProgress/>;
-    } else {
-        offerDetail = "Error!";
-    }
+        );
 
-    offerDetail = props.currentView === "list" ? offerDetail : null;
 
     return (
         <div className={classes.OfferDetailDescription}>
-            <OfferDetailHeader offerId={props.offerId}/>
+            <OfferDetailHeader/>
             {offerDetail}
         </div>
     )

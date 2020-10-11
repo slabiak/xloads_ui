@@ -1,6 +1,5 @@
 import React from "react";
 import classes from "./OfferDetailMap.module.css";
-import * as actionTypes from "../../../../store/actions";
 import {connect} from "react-redux";
 import OfferDetailHeader from "../OfferDetailHeader/OfferDetailHeader";
 import "react-image-gallery/styles/css/image-gallery.css";
@@ -27,10 +26,5 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        makeFetchSingleOfferRequest: (requestParams) => dispatch(actionTypes.makeFetchSingleOfferRequest(requestParams))
-    };
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(OfferDetailMap);
+export default connect(mapStateToProps)(OfferDetailMap);
