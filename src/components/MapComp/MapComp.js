@@ -83,7 +83,7 @@ class MapComp extends Component {
                             this.props.setTargetPlace(newSelectedPlace);
 
                         }).catch(e => {
-                        this.props.setTargetPlace({...this.state.targetPlace, error: true});
+                        this.props.setTargetPlace({...this.props.targetPlace, error: true});
                     })
 
                 } else {

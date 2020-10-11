@@ -45,20 +45,20 @@ const buildAddresFromPlaceProperties = (properties) => {
 }
 
 
-const buildInputTextFromSelectedPlace = (selectedPlace) => {
-    if (selectedPlace.properties === undefined && !selectedPlace.error) {
-        return 'Szukam adresu...';
-    } else if (selectedPlace.error) {
-        return 'Błąd. Sprobój ponownie później';
-    } else {
-        return buildAddresFromPlaceProperties(selectedPlace.properties);
-    }
-}
+
 
 
 function Search(props) {
+    const buildInputTextFromSelectedPlace = (selectedPlace) => {
+        if (selectedPlace.properties === undefined && !selectedPlace.error) {
+            return t('address.searching');
+        } else if (selectedPlace.error) {
+            return t('error.try.again');
+        } else {
+            return buildAddresFromPlaceProperties(selectedPlace.properties);
+        }
+    }
 
-    let autoCompleteErrorMessage = 'Błąd. Spróbuj ponownie później';
     const CancelToken = axios.CancelToken;
     let cancel;
 
@@ -68,6 +68,8 @@ function Search(props) {
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [inputValue, setInputValue] = React.useState(buildInputTextFromSelectedPlace(props.targetPlace));
+    let autoCompleteErrorMessage = t('error.try.again');
+
 
     const handleChange = (event) => {
         setInputValue(event.target.value);
@@ -208,7 +210,8 @@ function Search(props) {
 const mapStateToProps = state => {
     return {
         // currentRouteType: state.routeControls.currentRouteType
-        targetPlace: state.search.targetPlace
+        targetPlace: state.search.targetPlace,
+        currentSearchRegion: state.search.currentSearchRegion
     };
 }
 

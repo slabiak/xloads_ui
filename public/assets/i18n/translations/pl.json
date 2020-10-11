@@ -27,5 +27,7 @@
   "month": "miesiąc",
   "map": "Mapa",
   "list": "Lista",
-  "error": "Błąd"
+  "error": "Błąd",
+  "error.try.again": "Błąd, spróbuj ponownie później!",
+  "address.searching": "Szukam adresu..."
 }

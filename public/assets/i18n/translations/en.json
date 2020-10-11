@@ -29,5 +29,7 @@
   "route": "Route",
   "description": "Description",
   "list": "List",
-  "error": "Error"
+  "error": "Error",
+  "error.try.again": "Error, try again later!",
+  "address.searching": "Address searching..."
 }
