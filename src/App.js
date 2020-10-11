@@ -30,7 +30,6 @@ class App extends Component {
                 <Suspense fallback={null}>
                     <Route exact path="/" component={Home}></Route>
                     <Route path="/contact">
-                        {/*<p>contact hehe</p>*/}
                         <ImageGallery items={images}/>
                     </Route>
                     <Route path="/offers/:id" component={OfferDetailPage}></Route>

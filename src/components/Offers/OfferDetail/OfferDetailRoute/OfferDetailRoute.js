@@ -71,7 +71,6 @@ function OfferDetailRoute(props) {
 
             </React.Fragment>
     } else {
-        spinner = null;
         routeInfo = <React.Fragment>{t('route.calculation.error')} {props.routingRequestState.responseCode}<br/>
             <a href="" onClick={(e) => {
                 onRecalculateRoutesHandler(e)
@@ -85,6 +84,7 @@ function OfferDetailRoute(props) {
             <OfferDetailHeader/>
             <div className={classes.OfferDetailBody}>
                 <Search/>
+                {spinner}
                 {routeInfo}
             </div>
         </div>
