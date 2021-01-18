@@ -7,7 +7,8 @@
 }
 
 .SearchWrapper {
-    display: none
+    display: none;
+    flex-direction: column;
 }
 
 .ContainerRoute {
@@ -46,8 +47,8 @@
     .ContainerDescription {
         display: grid;
         grid-template-columns: 650px minmax(650px, auto);
-        grid-template-rows: 40px 90px auto 50px;
-        grid-template-areas: "header header" "offer_description search" "offer_description map" "offer_description map";
+        grid-template-rows: 40px 350px auto 50px;
+        grid-template-areas: "header header" "offer_description route" "offer_description map" "offer_description map";
         height: 100vh;
     }
 }

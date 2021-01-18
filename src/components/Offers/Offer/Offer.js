@@ -43,8 +43,9 @@ function Offer(props) {
             transitInfo = (
                 <React.Fragment>
                     <p>
-                        t('lines'): {routes.toString()} <br/>
-                        t('transfers'): {props.data.paths[0].transfers}
+                        {t('lines')}: {routes.toString()} <br/>
+                        {t('transfers')}: {props.data.paths[0].transfers}
+
                     </p>
                 </React.Fragment>
             )

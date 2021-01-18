@@ -4,7 +4,6 @@ import classes from './Offers.module.css';
 import OffersHeader from './OffersHeader/OffersHeader';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Button} from '@material-ui/core';
-import {Link} from "react-router-dom";
 import {connect} from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
 import {useTranslation} from 'react-i18next'
@@ -67,12 +66,14 @@ function Offers(props) {
     let offersHeader = null;
     if (props.currentView === 'list') {
         offers = props.data2.map(offer =>
-            <Link to={"/offers/" + offer.id}><Offer onRecalculateRoutesHandler={onRecalculateRoutesHandler}
-                                                    routingRequestState={props.routingRequestState}
-                                                    mode={props.routeType} key={offer.id}
-                                                    onMouseLeaveHandler={onMouseLeaveHandler}
-                                                    onMouseOverOfferHandler={onMouseOverOfferHandler}
-                                                    data={offer}></Offer></Link>
+                // <Link to={"/offers/" + offer.id}>
+                <Offer onRecalculateRoutesHandler={onRecalculateRoutesHandler}
+                       routingRequestState={props.routingRequestState}
+                       mode={props.routeType} key={offer.id}
+                       onMouseLeaveHandler={onMouseLeaveHandler}
+                       onMouseOverOfferHandler={onMouseOverOfferHandler}
+                       data={offer}></Offer>
+            //   </Link>
         )
     }
 

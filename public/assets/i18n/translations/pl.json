@@ -29,5 +29,8 @@
   "list": "Lista",
   "error": "Błąd",
   "error.try.again": "Błąd, spróbuj ponownie później!",
-  "address.searching": "Szukam adresu..."
+  "address.searching": "Szukam adresu...",
+  "outside.allowed.area": "Wybrane miejsce znajduje się zbyt daleko od ",
+  "choose.something.closer": "Proszę wybierz coś bliżej!",
+  "error": "Błąd!"
 }

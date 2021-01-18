@@ -9,8 +9,11 @@ import {Button, Modal} from "react-bootstrap";
 import {Pagination} from "@material-ui/lab";
 import {connect} from "react-redux";
 import * as actionTypes from "../../store/actions/index";
+import {useTranslation} from "react-i18next";
 
 function HomeComponent(props) {
+
+    const {t, i18n} = useTranslation()
 
     const onChangePageHandler = (event, value) => {
         let requestParams = {
@@ -44,15 +47,15 @@ function HomeComponent(props) {
             onHide={props.hideTooFarAwayModal}
         >
             <Modal.Header>
-                <Modal.Title>Błąd!</Modal.Title>
+                <Modal.Title>{t('error')}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <p>
                     {" "}
-                    Wybrane miejsce znajduje się poza granicami{" "}
-                    {props.currentSearchRegion.name}
+                    {t('outside.allowed.area')}{" "}
+                    <b>{props.currentSearchRegion.name}</b>
                 </p>
-                <p> Proszę, wybierz coś bliżej!</p>
+                <p> {t('choose.something.closer')}</p>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={props.hideTooFarAwayModal}>

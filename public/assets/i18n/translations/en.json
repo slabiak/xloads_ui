@@ -9,8 +9,8 @@
   "found.label": "Found",
   "added.label": "added",
   "category.label": "Category",
-  "rooms": "Rooms",
-  "flats": "Flats",
+  "rooms": "Room",
+  "flats": "Apartment",
   "contact": "Contact",
   "search.label": "Enter address or move red marker",
   "by.foot": "by foot",
@@ -31,5 +31,8 @@
   "list": "List",
   "error": "Error",
   "error.try.again": "Error, try again later!",
-  "address.searching": "Address searching..."
+  "address.searching": "Address searching...",
+  "outside.allowed.area": "Selected place is too far away from ",
+  "choose.something.closer": "Please select something closer!",
+  "error": "Error!"
 }

@@ -23,8 +23,8 @@ class MapComp extends Component {
     }
 
     markerClickedHandler = (id) => {
-        let offer = this.props.offers.filter(offer => offer.id === id);
-        this.setState({showModal: true, modalOffer: offer[0]});
+        // let offer = this.props.offers.filter(offer => offer.id === id);
+        // this.setState({showModal: true, modalOffer: offer[0]});
     }
 
     onModalHideHandler = () => {

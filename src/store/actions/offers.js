@@ -48,7 +48,7 @@ export const setRoutesLoading = (loading) => {
 export const makeRouteRequest = (requestParams) => {
     return dispatch => {
         dispatch(setRoutesLoading(true));
-        let apiUrl = `${config.MAP_API_PREFIX}/api/route/${requestParams.routeType}?fromLat=${requestParams.fromLat}&fromLng=${requestParams.fromLng}&toLat=${requestParams.toLat}&toLng=${requestParams.toLng}&depTime=2020-05-23T10:15:30`;
+        let apiUrl = `${config.MAP_API_PREFIX}/api/route/${requestParams.routeType}?fromLat=${requestParams.fromLat}&fromLng=${requestParams.fromLng}&toLat=${requestParams.toLat}&toLng=${requestParams.toLng}&depTime=2021-01-05T10:15:30`;
         axios.get(apiUrl, {timeout: config.MAP_API_TIMEOUT})
             .then(res => {
                 dispatch(onSuccessfulRouteRequest({fetchedPaths: res.data, responseCode: res.status}));

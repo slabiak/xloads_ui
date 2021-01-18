@@ -7,10 +7,10 @@ const dev = {
 };
 
 const prod = {
-    MAP_API_PREFIX: 'http://13.70.192.93:8087',
+    MAP_API_PREFIX: 'https://nearprops.com:8087',
     MAP_API_TIMEOUT: 30000,
 
-    OFFERS_API_PREFIX: 'http://13.70.192.93:8080',
+    OFFERS_API_PREFIX: 'https://nearprops.com:8080',
     OFFERS_API_TIMEOUT: 30000,
 };
 

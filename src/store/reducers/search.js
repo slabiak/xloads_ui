@@ -4,24 +4,47 @@ import {calculateBoundingBox} from '../../util/LatLngUtil';
 const initialState = {
     targetPlace: {
         geometry: {
-            coordinates: [17.0323709, 51.1106956]
+            coordinates: [-122.43910317261, 37.7677247]
         },
         properties: {
-            housenumber: "",
-            city: "Wroclaw",
-            street: "Rynek",
-            postcode: "50-116"
+            housenumber: "27",
+            city: "San Francisco",
+            street: "Park Hill Avenue",
+            postcode: "94114"
         },
         autocomplete: false,
         error: false
     },
     openTooFarAwayModal: false,
     currentSearchRegion: {
-        name: 'Wrocław',
-        boundingBox: calculateBoundingBox([17.0323709, 51.1106956], 15)
+        name: 'San Francisco',
+        boundingBox: calculateBoundingBox([-122.43910317261, 37.7677247], 15)
     },
 
 }
+
+//wrocław
+// const initialState = {
+//     targetPlace: {
+//         geometry: {
+//             coordinates: [17.0323709, 51.1106956]
+//         },
+//         properties: {
+//             housenumber: "",
+//             city: "Wroclaw",
+//             street: "Rynek",
+//             postcode: "50-116"
+//         },
+//         autocomplete: false,
+//         error: false
+//     },
+//     openTooFarAwayModal: false,
+//     currentSearchRegion: {
+//         name: 'Wrocław',
+//         boundingBox: calculateBoundingBox([17.0323709, 51.1106956], 15)
+//     },
+//
+// }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {

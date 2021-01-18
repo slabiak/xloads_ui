@@ -48,7 +48,7 @@ function OfferDetailPage(props) {
                 <React.Fragment> <OfferDetailDescription currentView={props.currentView}
                                                          offer={offer}/>
                     <div className={classes.SearchWrapper}>
-                        <Search></Search>
+                        <div><Search></Search></div>
                     </div>
                     <MapComp view={props.currentView} offerDetailView={true} offerDetailId={props.match.params.id}
                              hooveredOffer={props.hooveredOffer}></MapComp>
